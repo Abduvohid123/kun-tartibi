@@ -389,7 +389,7 @@
         <div class="month-nav-name" id="monthName"></div>
         <div class="month-nav-year" id="monthYear"></div>
       </div>
-      <button class="nav-btn" id="thisMonthBtn" onclick="goThisMonth()">Bu oy</button>
+      <button class="today-btn hidden" id="thisMonthBtn" onclick="goThisMonth()">Bu oy</button>
       <button class="nav-btn" onclick="changeMonth(1)" id="nextMonthBtn">&#8594;</button>
     </div>
     <div class="plans-progress-wrap">
@@ -711,7 +711,7 @@ function renderMonthly(){
   const d=parseMonth(selectedMonthKey), thisMk=monthKey(new Date());
   document.getElementById('monthName').textContent=MONTHS_UZ[d.getMonth()];
   document.getElementById('monthYear').textContent=d.getFullYear()+' yil';
-  document.getElementById('thisMonthBtn').style.visibility=selectedMonthKey===thisMk?'hidden':'visible';
+  document.getElementById('thisMonthBtn').classList.toggle('hidden', selectedMonthKey===thisMk);
   const catEl=document.getElementById('catTabs'); catEl.innerHTML='';
   CATEGORIES.forEach(c=>{ const b=document.createElement('button'); b.className='cat-tab'+(selectedCat===c.id?' active':''); b.textContent=c.label; b.addEventListener('click',()=>{ selectedCat=c.id; renderMonthly(); }); catEl.appendChild(b); });
   const allPlans=loadPlans(selectedMonthKey), filtered=selectedCat==='all'?allPlans:allPlans.filter(p=>p.cat===selectedCat);
