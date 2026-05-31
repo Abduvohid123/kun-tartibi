@@ -361,23 +361,18 @@
     <div class="exp-filter">
       <div class="exp-filter-title">📅 Vaqt oralig'i bo'yicha filter</div>
       <div class="exp-filter-row">
-        <input class="exp-date-input" id="filterFrom" type="date" placeholder="Dan">
-        <span class="exp-filter-sep">—</span>
-        <input class="exp-date-input" id="filterTo" type="date" placeholder="Gacha">
-        <button class="exp-filter-btn" onclick="applyFilter()">Filterlash</button>
-        <button class="exp-filter-clear" onclick="clearFilter()">✕ Tozalash</button>
+        <input class="exp-date-input" id="filterRange" placeholder="Sanani tanlang..." readonly style="flex:1; min-width:0; cursor:pointer;">
+        <button class="exp-filter-clear" onclick="clearFilter()">✕</button>
       </div>
       <div class="exp-filter-active hidden" id="filterActive"></div>
     </div>
 
     <div class="exp-add-form">
+      <input class="exp-input" id="expText" placeholder="Nima uchun?" maxlength="80" onkeydown="if(event.key==='Enter') addExpense()">
       <div class="exp-add-row">
-        <input class="exp-input" id="expText" placeholder="Nima uchun?" maxlength="80" onkeydown="if(event.key==='Enter') addExpense()">
-        <input class="exp-input amount" id="expAmount" placeholder="Summa" type="number" min="0" onkeydown="if(event.key==='Enter') addExpense()">
-      </div>
-      <div class="exp-add-row">
-        <input class="exp-date-input" id="expDate" type="date">
-        <button class="exp-add-btn" onclick="addExpense()">+ Qo'shish</button>
+        <input class="exp-input amount" id="expAmount" placeholder="Summa (so'm)" type="number" min="0" style="flex:1;">
+        <input class="exp-date-input" id="expDate" type="text" readonly style="flex:1; cursor:pointer;">
+        <button class="exp-add-btn" onclick="addExpense()">+</button>
       </div>
       <div class="exp-cat-row" id="expCatRow"></div>
     </div>
@@ -777,19 +772,15 @@ function getAllExpensesInRange(from, to){
   return result;
 }
 
-function applyFilter(){
-  const from = document.getElementById('filterFrom').value;
-  const to   = document.getElementById('filterTo').value;
-  if(!from || !to){ alert("Ikki sanani ham tanlang"); return; }
-  if(from > to){ alert("Boshlanish sanasi tugash sanasidan keyin bo'lmasin"); return; }
+function applyFilter(from, to){
   expFilter = { from, to };
   renderExpense();
 }
 
 function clearFilter(){
   expFilter = null;
-  document.getElementById('filterFrom').value = '';
-  document.getElementById('filterTo').value   = '';
+  const fp = document.getElementById('filterRange')._flatpickr;
+  if(fp) fp.clear();
   renderExpense();
 }
 
@@ -821,9 +812,7 @@ function renderExpense(){
   document.getElementById('expMonthYear').textContent = d.getFullYear()+' yil';
   document.getElementById('expThisMonthBtn').style.visibility = expMonthKey===thisMk?'hidden':'visible';
 
-  // default date ni bugunga set qil
-  const dateInp = document.getElementById('expDate');
-  if(!dateInp.value) dateInp.value = dateKey(new Date());
+  // default date — flatpickr o'zi 'today' qiladi, qo'lda tegilmaydi
 
   // cat buttons
   const catRow = document.getElementById('expCatRow');
@@ -938,9 +927,17 @@ function applyTheme(){
 function initFlatpickr(){
   const opts = { locale: 'uz', dateFormat: 'Y-m-d', disableMobile: true };
 
-  flatpickr('#expDate',    { ...opts, defaultDate: 'today' });
-  flatpickr('#filterFrom', { ...opts, onChange: ()=>{ if(document.getElementById('filterFrom').value && document.getElementById('filterTo').value) applyFilter(); } });
-  flatpickr('#filterTo',   { ...opts, onChange: ()=>{ if(document.getElementById('filterFrom').value && document.getElementById('filterTo').value) applyFilter(); } });
+  flatpickr('#expDate', { ...opts, defaultDate: 'today' });
+
+  flatpickr('#filterRange', {
+    ...opts,
+    mode: 'range',
+    dateFormat: 'Y-m-d',
+    locale: { ...flatpickr.l10ns.uz, rangeSeparator: ' — ' },
+    onClose(dates){
+      if(dates.length === 2) applyFilter(dateKey(dates[0]), dateKey(dates[1]));
+    }
+  });
 }
 
 /* INIT */
