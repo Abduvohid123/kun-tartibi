@@ -259,19 +259,6 @@
       <button class="add-period-btn" onclick="addPeriod()">+ Bo'lim qo'shish</button>
     </div>
 
-    <div class="monthly-section">
-      <div class="sec-head">🗓️ Oylik eslatma</div>
-      <div class="task-item" data-id="solo_trip" onclick="toggle('solo_trip')">
-        <div class="checkbox"></div>
-        <div class="task-main">
-          <span class="task-label">O'zing uchun sayohat</span>
-          <span class="task-duration">Oyning 4-haftasi</span>
-        </div>
-      </div>
-    </div>
-
-    <button class="reset-times" onclick="resetTimes()">↺ Soatlarni asl holatga qaytarish</button>
-
     <div class="section-title">📋 Oxirgi 14 kun tarixi</div>
     <div class="history-grid" id="historyGrid"></div>
   </div>
@@ -317,65 +304,42 @@ function switchTab(name){
 }
 
 /* ═══════════ KUN TARTIBI ═══════════ */
-const DEFAULT_WEEKDAY = [
+const DEFAULT_SCHEDULE = [
   { period:'🌙 Kecha', items:[
-    { id:'sleep',        label:'Uxlash',                duration:'2 soat',       time:'22:00' }]},
+    { id:'sleep',    label:'Uxlash',                  duration:'7–8 soat',     time:'22:00' }]},
   { period:'🌅 Ertalab', items:[
-    { id:'fajr',         label:'Bomdod + Badantarbiya', duration:'30–40 daqiqa', time:'05:00' },
-    { id:'quran_arabic', label:"Qur'on + Arab tili",    duration:'1 soat',       time:'05:45' },
-    { id:'breakfast',    label:'Nonushta',              duration:'20 daqiqa',    time:'07:00' }]},
+    { id:'morning',  label:'Ertalabki namoz + sport',  duration:'30–40 daqiqa', time:'05:30' },
+    { id:'breakfast',label:'Nonushta',                 duration:'20 daqiqa',    time:'07:00' }]},
   { period:'☀️ Kun', items:[
-    { id:'work',         label:'Ish',                   duration:'8 soat',       time:'09:00' }]},
+    { id:'work',     label:'Asosiy faoliyat',           duration:'8 soat',       time:'09:00' },
+    { id:'lunch',    label:'Tushlik',                   duration:'30 daqiqa',    time:'13:00' }]},
   { period:'🌆 Kechqurun', items:[
-    { id:'reading',      label:"Kitob o'qish (30 bet)", duration:'45–60 daqiqa', time:'18:00' },
-    { id:'kids',         label:'Bolalarga vaqt',        duration:'1 soat',       time:'19:00' }]},
-];
-const DEFAULT_WEEKEND = [
-  { period:'🌙 Kecha', items:[
-    { id:'sleep',        label:'Uxlash',                duration:'2 soat',       time:'22:00' }]},
-  { period:'🌅 Ertalab', items:[
-    { id:'fajr',         label:'Bomdod + Badantarbiya', duration:'30–40 daqiqa', time:'05:00' },
-    { id:'quran_juz',    label:"Kamida 1 pora Qur'on",  duration:'1 soat',       time:'05:45' },
-    { id:'lecture',      label:'Maruza eshitish',       duration:'1 soat',       time:'07:00' },
-    { id:'breakfast',    label:'Nonushta',              duration:'20 daqiqa',    time:'08:00' }]},
-  { period:'☀️ Kun', items:[
-    { id:'plan',         label:'Ishlarni rejalashtirish',duration:'1 soat',      time:'09:00' },
-    { id:'family_trip',  label:'Oilaviy sayohat',        duration:'3–4 soat',    time:'10:00' }]},
-  { period:'🌆 Kechqurun', items:[
-    { id:'reading_50',   label:"Kitob o'qish (50 bet)", duration:'1.5 soat',     time:'15:00' },
-    { id:'charity',      label:'Ehson + Qarindoshlar',  duration:'1–2 soat',     time:'16:30' }]},
+    { id:'reading',  label:"Kitob o'qish",              duration:'30–60 daqiqa', time:'18:00' },
+    { id:'family',   label:'Oila bilan vaqt',           duration:'1–2 soat',     time:'19:00' }]},
+  { period:'🌃 Kech', items:[
+    { id:'selfdev',  label:'Shaxsiy rivojlanish',       duration:'30 daqiqa',    time:'21:00' }]},
 ];
 
-function getSchedule(type){
-  const key = 'custom_schedule_'+type;
-  const r = localStorage.getItem(key);
-  return r ? JSON.parse(r) : JSON.parse(JSON.stringify(type==='weekday'?DEFAULT_WEEKDAY:DEFAULT_WEEKEND));
+function getSchedule(){
+  const r = localStorage.getItem('custom_schedule');
+  return r ? JSON.parse(r) : JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
 }
-function saveSchedule(type, data){
-  localStorage.setItem('custom_schedule_'+type, JSON.stringify(data));
+function saveSchedule(data){
+  localStorage.setItem('custom_schedule', JSON.stringify(data));
 }
-function scheduleType(dKey){ return isWeekend(parseDate(dKey))?'weekend':'weekday'; }
-function getAllIds(schedule){ return schedule.flatMap(g=>g.items.map(i=>i.id)).concat(['solo_trip']); }
+function getAllIds(schedule){ return schedule.flatMap(g=>g.items.map(i=>i.id)); }
 
 let selectedDate = dateKey(new Date());
 let editMode = false;
 
 function dateKey(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
 function parseDate(k){ const[y,m,d]=k.split('-').map(Number); return new Date(y,m-1,d); }
-function isWeekend(d){ return d.getDay()===0||d.getDay()===6; }
 function isWeek4(d){ return d.getDate()>=22&&d.getDate()<=28; }
 function loadDone(k){ const r=localStorage.getItem('tasks_'+k); return r?JSON.parse(r):[]; }
 function saveDone(k,a){ localStorage.setItem('tasks_'+k,JSON.stringify(a)); }
 function loadTimes(){ const r=localStorage.getItem('custom_times'); return r?JSON.parse(r):{}; }
 function saveTime(id,v){ const t=loadTimes(); t[id]=v; localStorage.setItem('custom_times',JSON.stringify(t)); }
 function resetTimes(){ if(confirm("Barcha soatlar asl holatiga qaytarilsinmi?")){ localStorage.removeItem('custom_times'); renderDaily(); } }
-function resetSchedule(){
-  if(confirm("Jadval asl holatiga qaytarilsinmi? Barcha o'zgartirishlar o'chadi.")){
-    localStorage.removeItem('custom_schedule_weekday');
-    localStorage.removeItem('custom_schedule_weekend');
-    renderDaily();
-  }
-}
 
 function toggleEditMode(){
   editMode = !editMode;
@@ -386,7 +350,7 @@ function toggleEditMode(){
 }
 
 /* ── jadval qurish ── */
-function buildSchedule(schedule, done, type){
+function buildSchedule(schedule, done){
   const container = document.getElementById('schedule');
   container.innerHTML = '';
   if(editMode) container.classList.add('edit-mode');
@@ -404,12 +368,12 @@ function buildSchedule(schedule, done, type){
       nameInp.value = group.period;
       nameInp.addEventListener('change', ()=>{
         schedule[gIdx].period = nameInp.value;
-        saveSchedule(type, schedule);
+        saveSchedule(schedule);
       });
       const delBtn = document.createElement('button');
       delBtn.className = 'del-period-btn'; delBtn.textContent = '✕ Bo\'limni o\'chirish';
       delBtn.addEventListener('click', ()=>{
-        if(confirm("Bu bo'lim o'chirilsinmi?")){ schedule.splice(gIdx,1); saveSchedule(type,schedule); renderDaily(); }
+        if(confirm("Bu bo'lim o'chirilsinmi?")){ schedule.splice(gIdx,1); saveSchedule(schedule); renderDaily(); }
       });
       header.appendChild(nameInp); header.appendChild(delBtn);
     } else {
@@ -452,10 +416,10 @@ function buildSchedule(schedule, done, type){
           '</div>';
 
         card.querySelector('.task-edit-btn').addEventListener('click', ()=>{
-          openInlineEdit(card, item, gIdx, iIdx, schedule, type);
+          openInlineEdit(card, item, gIdx, iIdx, schedule);
         });
         card.querySelector('.task-del-btn').addEventListener('click', ()=>{
-          if(confirm("Vazifa o'chirilsinmi?")){ group.items.splice(iIdx,1); saveSchedule(type,schedule); renderDaily(); }
+          if(confirm("Vazifa o'chirilsinmi?")){ group.items.splice(iIdx,1); saveSchedule(schedule); renderDaily(); }
         });
       } else {
         card.innerHTML =
@@ -478,13 +442,13 @@ function buildSchedule(schedule, done, type){
       const addRow = document.createElement('div'); addRow.className = 'add-task-row';
       const addBtn = document.createElement('button'); addBtn.className = 'add-task-btn';
       addBtn.textContent = '+ Vazifa qo\'shish';
-      addBtn.addEventListener('click', ()=>{ addBtn.style.display='none'; showAddTaskForm(addRow, gIdx, schedule, type, addBtn); });
+      addBtn.addEventListener('click', ()=>{ addBtn.style.display='none'; showAddTaskForm(addRow, gIdx, schedule, addBtn); });
       addRow.appendChild(addBtn); container.appendChild(addRow);
     }
   });
 }
 
-function openInlineEdit(card, item, gIdx, iIdx, schedule, type){
+function openInlineEdit(card, item, gIdx, iIdx, schedule){
   /* already editing? */
   if(card.querySelector('.inline-edit')) return;
   const main = card.querySelector('.task-main');
@@ -501,7 +465,7 @@ function openInlineEdit(card, item, gIdx, iIdx, schedule, type){
     item.label    = labelInp.value.trim()||item.label;
     item.duration = durInp.value.trim()||item.duration;
     schedule[gIdx].items[iIdx] = item;
-    saveSchedule(type, schedule); renderDaily();
+    saveSchedule(schedule); renderDaily();
   });
   cancelBtn.addEventListener('click', ()=>{ form.remove(); main.style.display=''; });
 
@@ -511,7 +475,7 @@ function openInlineEdit(card, item, gIdx, iIdx, schedule, type){
   labelInp.focus(); labelInp.select();
 }
 
-function showAddTaskForm(container, gIdx, schedule, type, addBtn){
+function showAddTaskForm(container, gIdx, schedule, addBtn){
   const form = document.createElement('div'); form.className='add-task-form';
   const labelInp = document.createElement('input'); labelInp.placeholder='Vazifa nomi'; labelInp.style.marginTop='6px';
   const durInp   = document.createElement('input'); durInp.placeholder='Davomiyligi (masalan: 30 daqiqa)';
@@ -523,7 +487,7 @@ function showAddTaskForm(container, gIdx, schedule, type, addBtn){
     const label = labelInp.value.trim(); if(!label) return;
     const newItem = { id:'task_'+Date.now(), label, duration: durInp.value.trim()||'—', time:'09:00' };
     schedule[gIdx].items.push(newItem);
-    saveSchedule(type, schedule); renderDaily();
+    saveSchedule(schedule); renderDaily();
   });
   cancelBtn.addEventListener('click', ()=>{ form.remove(); addBtn.style.display=''; });
 
@@ -533,11 +497,9 @@ function showAddTaskForm(container, gIdx, schedule, type, addBtn){
 }
 
 function addPeriod(){
-  const d = parseDate(selectedDate);
-  const type = scheduleType(selectedDate);
-  const schedule = getSchedule(type);
+  const schedule = getSchedule();
   schedule.push({ period:'🕐 Yangi bo\'lim', items:[] });
-  saveSchedule(type, schedule); renderDaily();
+  saveSchedule(schedule); renderDaily();
 }
 
 function openTimeEditor(lbl, id, cur){
@@ -554,8 +516,7 @@ function openTimeEditor(lbl, id, cur){
 function renderDaily(){
   const d=parseDate(selectedDate), done=loadDone(selectedDate);
   const today=dateKey(new Date());
-  const type=scheduleType(selectedDate);
-  const schedule=getSchedule(type);
+  const schedule=getSchedule();
 
   document.getElementById('dayName').textContent = DAYS_UZ[d.getDay()];
   document.getElementById('dayDate').textContent = d.getDate()+' '+MONTHS_UZ[d.getMonth()]+' '+d.getFullYear();
@@ -563,7 +524,7 @@ function renderDaily(){
   document.getElementById('nextBtn').disabled = selectedDate>=today;
   document.getElementById('monthlyAlert').style.display = isWeek4(d)?'block':'none';
 
-  buildSchedule(schedule, done, type);
+  buildSchedule(schedule, done);
 
   const soloEl=document.querySelector('#tab-daily [data-id="solo_trip"]');
   if(soloEl) soloEl.classList.toggle('done', done.includes('solo_trip'));
@@ -579,11 +540,11 @@ function renderDaily(){
 function renderHistory(){
   const grid=document.getElementById('historyGrid'), today=dateKey(new Date());
   grid.innerHTML='';
+  const schedule=getSchedule();
   for(let i=13;i>=0;i--){
     const d=new Date(); d.setDate(d.getDate()-i);
     const key=dateKey(d), done=loadDone(key);
-    const sched=getSchedule(scheduleType(key));
-    const ids=getAllIds(sched), count=ids.filter(id=>done.includes(id)).length;
+    const ids=getAllIds(schedule), count=ids.filter(id=>done.includes(id)).length;
     const pct=ids.length?Math.round(count/ids.length*100):0;
     const card=document.createElement('div');
     card.className='history-card'+(key===selectedDate?' active':'')+(key===today?' today-card':'');
