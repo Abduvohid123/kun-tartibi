@@ -215,14 +215,56 @@
   .yc-bar { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #f59e0b, #f97316); }
   .yc-count { font-size: 0.72rem; color: var(--text3); }
   .yc-count.yc-all { color: #34d399; }
+
+  /* ═══ XARAJATLAR ═══ */
+  .exp-month-nav { display: flex; align-items: center; justify-content: space-between; background: var(--bg2); border-radius: 14px; padding: 12px 16px; margin-bottom: 14px; border: 1px solid var(--border); }
+  .exp-month-info { text-align: center; flex: 1; }
+  .exp-month-name { font-size: 1.1rem; font-weight: 700; background: linear-gradient(135deg, #34d399, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .exp-month-year { font-size: 0.82rem; color: var(--text3); margin-top: 2px; }
+
+  .exp-summary { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 14px; display: flex; gap: 10px; }
+  .exp-sum-box { flex: 1; text-align: center; padding: 10px; background: var(--bg3); border-radius: 10px; }
+  .exp-sum-label { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .exp-sum-val { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+  .exp-sum-val.red { color: #f87171; }
+  .exp-sum-val.green { color: #34d399; }
+
+  .exp-add-form { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .exp-add-row { display: flex; gap: 8px; }
+  .exp-input { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 10px 12px; font-size: 0.92rem; outline: none; transition: border-color 0.15s; min-width: 0; }
+  .exp-input:focus { border-color: #34d399; }
+  .exp-input::placeholder { color: var(--text4); }
+  .exp-input.amount { width: 130px; flex: none; }
+  .exp-date-input { background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 10px 12px; font-size: 0.88rem; outline: none; cursor: pointer; transition: border-color 0.15s; }
+  .exp-date-input:focus { border-color: #34d399; }
+  .exp-cat-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .exp-cat-btn { padding: 5px 10px; border-radius: 20px; font-size: 0.78rem; border: 1px solid var(--border); background: transparent; color: var(--text3); cursor: pointer; transition: all 0.15s; }
+  .exp-cat-btn.active { background: #065f46; border-color: #059669; color: #34d399; }
+  .exp-cat-btn:hover:not(.active) { border-color: var(--border2); color: var(--text2); }
+  .exp-add-btn { background: #065f46; border: none; color: #34d399; padding: 10px 20px; border-radius: 10px; font-size: 0.92rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+  .exp-add-btn:hover { background: #047857; }
+
+  .exp-day-group { margin-bottom: 14px; }
+  .exp-day-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; padding: 0 2px; }
+  .exp-day-total { font-size: 0.82rem; color: var(--text2); font-weight: 600; }
+
+  .exp-item { display: flex; align-items: center; gap: 10px; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 11px 14px; margin-bottom: 6px; }
+  .exp-cat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .exp-item-main { flex: 1; min-width: 0; }
+  .exp-item-text { font-size: 0.92rem; color: var(--text); }
+  .exp-item-meta { font-size: 0.72rem; color: var(--text4); margin-top: 2px; }
+  .exp-item-amount { font-size: 0.95rem; font-weight: 700; color: #f87171; flex-shrink: 0; }
+  .exp-item-del { background: none; border: none; color: var(--text4); cursor: pointer; padding: 2px 6px; border-radius: 6px; font-size: 0.85rem; transition: all 0.15s; flex-shrink: 0; }
+  .exp-item-del:hover { background: #3b1c1c; color: #f87171; }
 </style>
 </head>
 <body>
 <div class="container">
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('daily')">☀️ Kun tartibim</button>
-    <button class="tab-btn" onclick="switchTab('monthly')">📅 Oylik rejalar</button>
+    <button class="tab-btn active" onclick="switchTab('daily')">☀️ Kun</button>
+    <button class="tab-btn" onclick="switchTab('monthly')">📅 Reja</button>
+    <button class="tab-btn" onclick="switchTab('expense')">💰 Xarajat</button>
     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Tema o'zgartirish">🌙</button>
   </div>
 
@@ -262,6 +304,37 @@
     <div class="history-grid" id="historyGrid"></div>
   </div>
 
+  <!-- ═══ XARAJATLAR ═══ -->
+  <div id="tab-expense" class="tab-panel">
+
+    <div class="exp-month-nav">
+      <button class="nav-btn" onclick="changeExpMonth(-1)">&#8592;</button>
+      <div class="exp-month-info">
+        <div class="exp-month-name" id="expMonthName"></div>
+        <div class="exp-month-year" id="expMonthYear"></div>
+      </div>
+      <button class="nav-btn" id="expThisMonthBtn" onclick="goExpThisMonth()">Bu oy</button>
+      <button class="nav-btn" onclick="changeExpMonth(1)" id="expNextMonthBtn">&#8594;</button>
+    </div>
+
+    <div class="exp-summary" id="expSummary"></div>
+
+    <div class="exp-add-form">
+      <div class="exp-add-row">
+        <input class="exp-input" id="expText" placeholder="Nima uchun?" maxlength="80" onkeydown="if(event.key==='Enter') addExpense()">
+        <input class="exp-input amount" id="expAmount" placeholder="Summa" type="number" min="0" onkeydown="if(event.key==='Enter') addExpense()">
+      </div>
+      <div class="exp-add-row">
+        <input class="exp-date-input" id="expDate" type="date">
+        <button class="exp-add-btn" onclick="addExpense()">+ Qo'shish</button>
+      </div>
+      <div class="exp-cat-row" id="expCatRow"></div>
+    </div>
+
+    <div id="expList"></div>
+
+  </div>
+
   <!-- ═══ OYLIK REJALAR ═══ -->
   <div id="tab-monthly" class="tab-panel">
     <div class="month-nav">
@@ -296,10 +369,11 @@ function pad(n){ return n<10?'0'+n:''+n; }
 function escHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function switchTab(name){
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['daily','monthly'][i]===name));
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['daily','monthly','expense'][i]===name));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   if(name==='monthly') renderMonthly();
+  if(name==='expense') renderExpense();
 }
 
 /* ═══════════ KUN TARTIBI ═══════════ */
@@ -615,6 +689,134 @@ function renderYearGrid(){
 }
 function changeMonth(dir){ const d=parseMonth(selectedMonthKey); d.setMonth(d.getMonth()+dir); selectedMonthKey=monthKey(d); renderMonthly(); }
 function goThisMonth(){ selectedMonthKey=monthKey(new Date()); renderMonthly(); }
+
+/* ═══════════ XARAJATLAR ═══════════ */
+const EXP_CATS = [
+  { id:'food',      label:'🍔 Ovqat',      color:'#f97316' },
+  { id:'transport', label:'🚗 Transport',   color:'#60a5fa' },
+  { id:'shopping',  label:'🛒 Xarid',       color:'#a78bfa' },
+  { id:'health',    label:'💊 Sog\'liq',    color:'#34d399' },
+  { id:'edu',       label:'🎓 Ta\'lim',     color:'#fbbf24' },
+  { id:'home',      label:'🏠 Uy',          color:'#f472b6' },
+  { id:'other',     label:'📌 Boshqa',      color:'#94a3b8' },
+];
+
+let expMonthKey = monthKey(new Date());
+let expCat = 'food';
+
+function loadExpenses(mk){ const r=localStorage.getItem('exp_'+mk); return r?JSON.parse(r):[]; }
+function saveExpenses(mk,a){ localStorage.setItem('exp_'+mk,JSON.stringify(a)); }
+function fmtMoney(n){ return Number(n).toLocaleString('uz-UZ')+' so\'m'; }
+
+function addExpense(){
+  const text   = document.getElementById('expText').value.trim();
+  const amount = parseFloat(document.getElementById('expAmount').value);
+  const date   = document.getElementById('expDate').value;
+  if(!text || !amount || amount<=0 || !date) return;
+
+  const list = loadExpenses(monthKey(new Date(date+'T00:00:00')));
+  list.push({ id:Date.now()+'', text, amount, cat:expCat, date });
+  saveExpenses(monthKey(new Date(date+'T00:00:00')), list);
+
+  document.getElementById('expText').value = '';
+  document.getElementById('expAmount').value = '';
+  document.getElementById('expDate').value = dateKey(new Date());
+  renderExpense();
+}
+
+function deleteExpense(mk, id){
+  saveExpenses(mk, loadExpenses(mk).filter(e=>e.id!==id));
+  renderExpense();
+}
+
+function renderExpense(){
+  const d = parseMonth(expMonthKey);
+  const thisMk = monthKey(new Date());
+  document.getElementById('expMonthName').textContent = MONTHS_UZ[d.getMonth()];
+  document.getElementById('expMonthYear').textContent = d.getFullYear()+' yil';
+  document.getElementById('expThisMonthBtn').style.visibility = expMonthKey===thisMk?'hidden':'visible';
+
+  // default date ni bugunga set qil
+  const dateInp = document.getElementById('expDate');
+  if(!dateInp.value) dateInp.value = dateKey(new Date());
+
+  // cat buttons
+  const catRow = document.getElementById('expCatRow');
+  catRow.innerHTML = '';
+  EXP_CATS.forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'exp-cat-btn'+(expCat===c.id?' active':'');
+    btn.textContent = c.label;
+    btn.addEventListener('click', ()=>{ expCat=c.id; renderExpense(); });
+    catRow.appendChild(btn);
+  });
+
+  const expenses = loadExpenses(expMonthKey);
+  const total = expenses.reduce((s,e)=>s+e.amount, 0);
+  const todayExp = expenses.filter(e=>e.date===dateKey(new Date())).reduce((s,e)=>s+e.amount,0);
+
+  // summary
+  document.getElementById('expSummary').innerHTML =
+    '<div class="exp-sum-box"><div class="exp-sum-label">Oylik jami</div><div class="exp-sum-val red">'+fmtMoney(total)+'</div></div>'+
+    '<div class="exp-sum-box"><div class="exp-sum-label">Bugungi</div><div class="exp-sum-val red">'+fmtMoney(todayExp)+'</div></div>'+
+    '<div class="exp-sum-box"><div class="exp-sum-label">Yozuvlar</div><div class="exp-sum-val">'+expenses.length+' ta</div></div>';
+
+  // group by date
+  const byDate = {};
+  expenses.forEach(e=>{ if(!byDate[e.date]) byDate[e.date]=[]; byDate[e.date].push(e); });
+  const sortedDates = Object.keys(byDate).sort((a,b)=>b.localeCompare(a));
+
+  const list = document.getElementById('expList');
+  list.innerHTML = '';
+
+  if(!sortedDates.length){
+    list.innerHTML = '<div class="empty-state">Hali xarajat yozilmagan.<br>Yuqoridagi formadan boshlang.</div>';
+    return;
+  }
+
+  sortedDates.forEach(date=>{
+    const items = byDate[date];
+    const dayTotal = items.reduce((s,e)=>s+e.amount,0);
+    const dd = parseDate(date);
+
+    const group = document.createElement('div');
+    group.className = 'exp-day-group';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'exp-day-header';
+    const isToday = date===dateKey(new Date());
+    hdr.innerHTML =
+      '<span>'+(isToday?'Bugun — ':'')+DAYS_UZ[dd.getDay()]+', '+dd.getDate()+' '+MONTHS_UZ[dd.getMonth()]+'</span>'+
+      '<span class="exp-day-total">'+fmtMoney(dayTotal)+'</span>';
+    group.appendChild(hdr);
+
+    items.forEach(e=>{
+      const cat = EXP_CATS.find(c=>c.id===e.cat)||EXP_CATS[6];
+      const el = document.createElement('div');
+      el.className = 'exp-item';
+      el.innerHTML =
+        '<div class="exp-cat-dot" style="background:'+cat.color+'"></div>'+
+        '<div class="exp-item-main">'+
+          '<div class="exp-item-text">'+escHtml(e.text)+'</div>'+
+          '<div class="exp-item-meta">'+cat.label+'</div>'+
+        '</div>'+
+        '<div class="exp-item-amount">'+fmtMoney(e.amount)+'</div>'+
+        '<button class="exp-item-del" title="O\'chirish">✕</button>';
+      el.querySelector('.exp-item-del').addEventListener('click', ()=>{
+        if(confirm("O'chirilsinmi?")) deleteExpense(expMonthKey, e.id);
+      });
+      group.appendChild(el);
+    });
+
+    list.appendChild(group);
+  });
+}
+
+function changeExpMonth(dir){
+  const d = parseMonth(expMonthKey); d.setMonth(d.getMonth()+dir);
+  expMonthKey = monthKey(d); renderExpense();
+}
+function goExpThisMonth(){ expMonthKey = monthKey(new Date()); renderExpense(); }
 
 /* ═══════════ TEMA ═══════════ */
 function toggleTheme(){
