@@ -28,186 +28,179 @@
     margin-bottom: 14px;
     border: 1px solid #334155;
   }
-
   .nav-btn {
-    background: #334155;
-    border: none;
-    color: #94a3b8;
-    width: 36px; height: 36px;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background 0.15s;
+    background: #334155; border: none; color: #94a3b8;
+    width: 36px; height: 36px; border-radius: 8px;
+    font-size: 1.1rem; cursor: pointer; transition: background 0.15s;
     display: flex; align-items: center; justify-content: center;
   }
   .nav-btn:hover { background: #475569; color: #e2e8f0; }
   .nav-btn:disabled { opacity: 0.3; cursor: default; }
-
   .day-info { text-align: center; flex: 1; }
   .day-name {
-    font-size: 1.15rem;
-    font-weight: 700;
+    font-size: 1.15rem; font-weight: 700;
     background: linear-gradient(135deg, #60a5fa, #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
   .day-date { font-size: 0.82rem; color: #64748b; margin-top: 2px; }
-
   .today-btn {
-    background: #1d4ed8;
-    border: none;
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: background 0.15s;
-    white-space: nowrap;
+    background: #1d4ed8; border: none; color: #fff;
+    padding: 6px 12px; border-radius: 8px; font-size: 0.8rem;
+    cursor: pointer; white-space: nowrap;
   }
   .today-btn:hover { background: #2563eb; }
   .today-btn.hidden { visibility: hidden; pointer-events: none; }
 
   /* PROGRESS */
   .progress-wrap { margin-bottom: 14px; }
-  .progress-bar-bg {
-    background: #1e293b;
-    border-radius: 20px;
-    height: 10px;
-    overflow: hidden;
-  }
+  .progress-bar-bg { background: #1e293b; border-radius: 20px; height: 10px; overflow: hidden; }
   .progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #60a5fa, #a78bfa);
-    border-radius: 20px;
-    transition: width 0.4s ease;
+    height: 100%; background: linear-gradient(90deg, #60a5fa, #a78bfa);
+    border-radius: 20px; transition: width 0.4s ease;
   }
   .progress-text { text-align: center; font-size: 0.8rem; color: #64748b; margin-top: 5px; }
 
   /* MONTHLY ALERT */
   .monthly-alert {
-    background: #064e3b;
-    border: 1px solid #065f46;
-    border-radius: 12px;
-    padding: 12px 18px;
-    margin-bottom: 14px;
-    font-size: 0.9rem;
-    color: #6ee7b7;
-    text-align: center;
-    display: none;
+    background: #064e3b; border: 1px solid #065f46; border-radius: 12px;
+    padding: 12px 18px; margin-bottom: 14px; font-size: 0.9rem;
+    color: #6ee7b7; text-align: center; display: none;
   }
 
-  /* SECTIONS */
-  .section {
-    background: #1e293b;
-    border-radius: 14px;
-    margin-bottom: 14px;
-    overflow: hidden;
-    border: 1px solid #334155;
-  }
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 70px; margin-bottom: 14px; }
 
-  .section-header {
-    padding: 12px 18px;
+  .time-group { position: relative; margin-bottom: 6px; }
+
+  .time-label {
+    position: absolute;
+    left: -70px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.78rem;
+    color: #60a5fa;
     font-weight: 600;
-    font-size: 0.82rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    width: 58px;
+    text-align: right;
+    line-height: 1.2;
   }
-  .section-header.daily   { background: #1d4ed8; }
-  .section-header.weekend { background: #7c3aed; }
-  .section-header.monthly { background: #065f46; }
+
+  /* vertical line */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 56px;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: #1e3a5f;
+    border-radius: 2px;
+  }
+
+  .time-dot {
+    position: absolute;
+    left: -17px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #1e3a5f;
+    border: 2px solid #334155;
+    transition: background 0.2s, border-color 0.2s;
+    z-index: 1;
+  }
 
   .task-item {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 18px;
-    border-bottom: 1px solid #0f172a;
-    cursor: pointer;
-    transition: background 0.15s;
-    user-select: none;
-  }
-  .task-item:last-child { border-bottom: none; }
-  .task-item:hover { background: #263248; }
-
-  .task-item.done .task-label { text-decoration: line-through; color: #475569; }
-  .task-item.done .checkbox { background: #3b82f6; border-color: #3b82f6; }
-  .task-item.done .checkbox::after { opacity: 1; }
-
-  .checkbox {
-    width: 22px; height: 22px;
-    border-radius: 6px;
-    border: 2px solid #475569;
-    flex-shrink: 0;
-    position: relative;
-    transition: all 0.2s;
-  }
-  .checkbox::after {
-    content: '';
-    position: absolute;
-    top: 3px; left: 6px;
-    width: 6px; height: 11px;
-    border: 2px solid #fff;
-    border-top: none; border-left: none;
-    transform: rotate(45deg);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .task-label { font-size: 0.97rem; flex: 1; transition: color 0.2s; }
-  .task-time {
-    font-size: 0.78rem;
-    color: #60a5fa;
-    background: #1e3a5f;
-    padding: 2px 8px;
-    border-radius: 20px;
-    flex-shrink: 0;
-  }
-
-  /* HISTORY */
-  .history-title {
-    font-size: 0.82rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #64748b;
-    margin: 20px 0 10px;
-    padding-left: 4px;
-  }
-
-  .history-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 8px;
-    margin-bottom: 30px;
-  }
-
-  .history-card {
+    padding: 11px 14px;
     background: #1e293b;
     border: 1px solid #334155;
     border-radius: 12px;
-    padding: 10px 12px;
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
+    transition: background 0.15s, border-color 0.15s;
+    user-select: none;
+    margin-bottom: 6px;
+  }
+  .task-item:hover { background: #263248; border-color: #475569; }
+  .task-item.done { border-color: #1e3a5f; }
+  .task-item.done .task-label { text-decoration: line-through; color: #475569; }
+  .task-item.done .checkbox { background: #3b82f6; border-color: #3b82f6; }
+  .task-item.done .checkbox::after { opacity: 1; }
+  .task-item.done .time-dot { background: #3b82f6; border-color: #3b82f6; }
+
+  .checkbox {
+    width: 22px; height: 22px; border-radius: 6px;
+    border: 2px solid #475569; flex-shrink: 0; position: relative; transition: all 0.2s;
+  }
+  .checkbox::after {
+    content: ''; position: absolute;
+    top: 3px; left: 6px; width: 6px; height: 11px;
+    border: 2px solid #fff; border-top: none; border-left: none;
+    transform: rotate(45deg); opacity: 0; transition: opacity 0.2s;
+  }
+
+  .task-main { flex: 1; }
+  .task-label { font-size: 0.95rem; display: block; }
+  .task-duration {
+    font-size: 0.75rem; color: #64748b; margin-top: 2px; display: block;
+  }
+
+  /* SECTION HEADERS */
+  .period-header {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.07em;
+    text-transform: uppercase; color: #94a3b8;
+    margin: 16px 0 8px;
+    padding-left: 0;
+  }
+  .period-header span { opacity: 0.7; }
+
+  /* MONTHLY */
+  .monthly-section {
+    background: #1e293b; border-radius: 14px;
+    border: 1px solid #065f46; margin-bottom: 14px; overflow: hidden;
+  }
+  .monthly-section .section-header {
+    background: #065f46; padding: 10px 16px;
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .monthly-section .task-item {
+    border-radius: 0; border: none; border-bottom: 1px solid #0f172a; margin: 0;
+  }
+  .monthly-section .task-item:last-child { border-bottom: none; }
+
+  /* HISTORY */
+  .history-title {
+    font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #64748b; margin: 20px 0 10px; padding-left: 4px;
+  }
+  .history-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px; margin-bottom: 30px;
+  }
+  .history-card {
+    background: #1e293b; border: 1px solid #334155; border-radius: 12px;
+    padding: 10px 12px; cursor: pointer; transition: border-color 0.15s, background 0.15s;
   }
   .history-card:hover { border-color: #60a5fa; background: #1a2a42; }
   .history-card.active { border-color: #60a5fa; background: #1a2a42; }
   .history-card.today-card { border-color: #a78bfa; }
-
-  .hc-day { font-size: 0.75rem; color: #94a3b8; }
-  .hc-date { font-size: 0.95rem; font-weight: 600; margin: 2px 0 6px; }
+  .hc-day { font-size: 0.72rem; color: #94a3b8; }
+  .hc-date { font-size: 0.92rem; font-weight: 600; margin: 2px 0 6px; }
   .hc-bar-bg { background: #0f172a; border-radius: 10px; height: 5px; margin-bottom: 5px; overflow: hidden; }
   .hc-bar { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #60a5fa, #a78bfa); }
-  .hc-pct { font-size: 0.75rem; color: #64748b; }
+  .hc-pct { font-size: 0.72rem; color: #64748b; }
   .hc-pct.done-all { color: #34d399; }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- KUN NAVIGATSIYASI -->
+  <!-- NAV -->
   <div class="day-nav">
     <button class="nav-btn" id="prevBtn" onclick="changeDay(-1)">&#8592;</button>
     <div class="day-info">
@@ -223,85 +216,25 @@
     <div class="progress-bar-bg">
       <div class="progress-bar" id="progressBar" style="width:0%"></div>
     </div>
-    <div class="progress-text" id="progressText">0 / 0 vazifa</div>
+    <div class="progress-text" id="progressText"></div>
   </div>
 
   <div class="monthly-alert" id="monthlyAlert">
     🌍 Bu oyning 4-haftasi — o'zing uchun sayohat rejalashtirishni unutma!
   </div>
 
-  <!-- HAFTA KUNLARI -->
-  <div class="section" id="dailySection">
-    <div class="section-header daily">☀️ Kundalik Vazifalar</div>
-    <div class="task-item" data-id="sleep">
-      <div class="checkbox"></div>
-      <span class="task-label">Soat 10–11 da uxlash</span>
-      <span class="task-time">22:00–23:00</span>
-    </div>
-    <div class="task-item" data-id="fajr">
-      <div class="checkbox"></div>
-      <span class="task-label">Bomdoddan keyin badantarbiya</span>
-      <span class="task-time">Bomdod</span>
-    </div>
-    <div class="task-item" data-id="breakfast">
-      <div class="checkbox"></div>
-      <span class="task-label">Nonushta</span>
-      <span class="task-time">Ertalab</span>
-    </div>
-    <div class="task-item" data-id="quran_arabic">
-      <div class="checkbox"></div>
-      <span class="task-label">Qur'on + Arab tili</span>
-      <span class="task-time">Ertalab</span>
-    </div>
-    <div class="task-item" data-id="work">
-      <div class="checkbox"></div>
-      <span class="task-label">Ish</span>
-      <span class="task-time">Kun</span>
-    </div>
-    <div class="task-item" data-id="reading">
-      <div class="checkbox"></div>
-      <span class="task-label">Ishdan keyin 30 bet kitob o'qish</span>
-      <span class="task-time">Kechqurun</span>
-    </div>
-    <div class="task-item" data-id="kids">
-      <div class="checkbox"></div>
-      <span class="task-label">Bolalarga 1 soat vaqt ajratish</span>
-      <span class="task-time">Kechqurun</span>
-    </div>
-  </div>
-
-  <!-- SHANBA-YAKSHANBA -->
-  <div class="section" id="weekendSection">
-    <div class="section-header weekend">🏡 Shanba – Yakshanba</div>
-    <div class="task-item" data-id="plan">
-      <div class="checkbox"></div>
-      <span class="task-label">Ishlarni rejalashtirish</span>
-    </div>
-    <div class="task-item" data-id="family_trip">
-      <div class="checkbox"></div>
-      <span class="task-label">Oilaviy sayohat</span>
-    </div>
-    <div class="task-item" data-id="charity">
-      <div class="checkbox"></div>
-      <span class="task-label">Ehson + Qarindoshlar ziyorati</span>
-    </div>
-    <div class="task-item" data-id="quran_juz">
-      <div class="checkbox"></div>
-      <span class="task-label">Kamida 1 pora Qur'on o'qish</span>
-    </div>
-    <div class="task-item" data-id="reading_50">
-      <div class="checkbox"></div>
-      <span class="task-label">50 bet kitob o'qish</span>
-    </div>
-  </div>
+  <!-- JADVAL -->
+  <div id="schedule"></div>
 
   <!-- OYLIK -->
-  <div class="section">
-    <div class="section-header monthly">🗓️ Oylik Eslatma</div>
-    <div class="task-item" data-id="solo_trip">
+  <div class="monthly-section">
+    <div class="section-header">🗓️ Oylik eslatma</div>
+    <div class="task-item" data-id="solo_trip" onclick="toggle('solo_trip')">
       <div class="checkbox"></div>
-      <span class="task-label">O'zing uchun sayohat (4-hafta)</span>
-      <span class="task-time">4-hafta</span>
+      <div class="task-main">
+        <span class="task-label">O'zing uchun sayohat</span>
+        <span class="task-duration">Oyning 4-haftasi</span>
+      </div>
     </div>
   </div>
 
@@ -312,44 +245,123 @@
 </div>
 
 <script>
-const DAYS_UZ     = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
-const MONTHS_UZ   = ['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentabr','Oktabr','Noyabr','Dekabr'];
-const WEEKDAY_IDS = ['sleep','fajr','breakfast','quran_arabic','work','reading','kids','solo_trip'];
-const WEEKEND_IDS = ['plan','family_trip','charity','quran_juz','reading_50','solo_trip'];
+const DAYS_UZ   = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+const MONTHS_UZ = ['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentabr','Oktabr','Noyabr','Dekabr'];
+
+// Hafta kunlari jadvali
+const WEEKDAY_SCHEDULE = [
+  { period: '🌙 Kecha', items: [
+    { id: 'sleep', label: 'Uxlash', duration: '2 soat', time: '22:00' }
+  ]},
+  { period: '🌅 Ertalab', items: [
+    { id: 'fajr',        label: 'Bomdod + Badantarbiya', duration: '30–40 daqiqa', time: '05:00' },
+    { id: 'quran_arabic',label: "Qur'on + Arab tili",    duration: '1 soat',       time: '05:45' },
+    { id: 'breakfast',   label: 'Nonushta',              duration: '20 daqiqa',    time: '07:00' },
+  ]},
+  { period: '☀️ Kun', items: [
+    { id: 'work', label: 'Ish', duration: '8 soat', time: '09:00' },
+  ]},
+  { period: '🌆 Kechqurun', items: [
+    { id: 'reading', label: 'Kitob o\'qish (30 bet)', duration: '45–60 daqiqa', time: '18:00' },
+    { id: 'kids',    label: 'Bolalarga vaqt',         duration: '1 soat',       time: '19:00' },
+  ]},
+];
+
+// Shanba-Yakshanba jadvali
+const WEEKEND_SCHEDULE = [
+  { period: '🌙 Kecha', items: [
+    { id: 'sleep', label: 'Uxlash', duration: '2 soat', time: '22:00' }
+  ]},
+  { period: '🌅 Ertalab', items: [
+    { id: 'fajr',        label: 'Bomdod + Badantarbiya', duration: '30–40 daqiqa', time: '05:00' },
+    { id: 'quran_juz',   label: "Kamida 1 pora Qur'on",  duration: '1 soat',       time: '05:45' },
+    { id: 'lecture',     label: 'Maruza eshitish',        duration: '1 soat',       time: '07:00' },
+    { id: 'breakfast',   label: 'Nonushta',               duration: '20 daqiqa',    time: '08:00' },
+  ]},
+  { period: '☀️ Kun', items: [
+    { id: 'plan',        label: 'Ishlarni rejalashtirish', duration: '1 soat',   time: '09:00' },
+    { id: 'family_trip', label: 'Oilaviy sayohat',         duration: '3–4 soat', time: '10:00' },
+  ]},
+  { period: '🌆 Kechqurun', items: [
+    { id: 'reading_50', label: 'Kitob o\'qish (50 bet)', duration: '1.5 soat', time: '15:00' },
+    { id: 'charity',    label: 'Ehson + Qarindoshlar',   duration: '1–2 soat', time: '16:30' },
+  ]},
+];
+
+const WEEKDAY_IDS = WEEKDAY_SCHEDULE.flatMap(g => g.items.map(i => i.id)).concat(['solo_trip']);
+const WEEKEND_IDS = WEEKEND_SCHEDULE.flatMap(g => g.items.map(i => i.id)).concat(['solo_trip']);
 
 let selectedDate = dateKey(new Date());
 
 function dateKey(d) {
   return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
 }
-
 function pad(n) { return n < 10 ? '0'+n : ''+n; }
-
-function parseDate(key) {
-  const [y,m,d] = key.split('-').map(Number);
-  return new Date(y, m-1, d);
-}
-
-function isWeekend(d) { return d.getDay() === 0 || d.getDay() === 6; }
-function isWeek4(d)   { return d.getDate() >= 22 && d.getDate() <= 28; }
+function parseDate(key) { const [y,m,d] = key.split('-').map(Number); return new Date(y,m-1,d); }
+function isWeekend(d)   { return d.getDay() === 0 || d.getDay() === 6; }
+function isWeek4(d)     { return d.getDate() >= 22 && d.getDate() <= 28; }
 
 function loadDone(dKey) {
   const raw = localStorage.getItem('tasks_' + dKey);
   return raw ? JSON.parse(raw) : [];
 }
-
 function saveDone(dKey, arr) {
   localStorage.setItem('tasks_' + dKey, JSON.stringify(arr));
 }
-
 function taskIds(dKey) {
   return isWeekend(parseDate(dKey)) ? WEEKEND_IDS : WEEKDAY_IDS;
 }
 
+function buildSchedule(schedule, done) {
+  const container = document.getElementById('schedule');
+  container.innerHTML = '';
+
+  schedule.forEach(group => {
+    const header = document.createElement('div');
+    header.className = 'period-header';
+    header.innerHTML = '<span>' + group.period + '</span>';
+    container.appendChild(header);
+
+    const timeline = document.createElement('div');
+    timeline.className = 'timeline';
+
+    group.items.forEach(item => {
+      const wrap = document.createElement('div');
+      wrap.className = 'time-group';
+
+      const dot = document.createElement('div');
+      dot.className = 'time-dot';
+
+      const timeLabel = document.createElement('div');
+      timeLabel.className = 'time-label';
+      timeLabel.textContent = item.time;
+
+      const taskEl = document.createElement('div');
+      taskEl.className = 'task-item' + (done.includes(item.id) ? ' done' : '');
+      taskEl.dataset.id = item.id;
+      taskEl.innerHTML =
+        '<div class="checkbox"></div>' +
+        '<div class="task-main">' +
+          '<span class="task-label">' + item.label + '</span>' +
+          '<span class="task-duration">' + item.duration + '</span>' +
+        '</div>';
+
+      taskEl.addEventListener('click', function() { toggle(item.id); });
+
+      wrap.appendChild(timeLabel);
+      wrap.appendChild(dot);
+      wrap.appendChild(taskEl);
+      timeline.appendChild(wrap);
+    });
+
+    container.appendChild(timeline);
+  });
+}
+
 function render() {
-  const d      = parseDate(selectedDate);
-  const done   = loadDone(selectedDate);
-  const today  = dateKey(new Date());
+  const d       = parseDate(selectedDate);
+  const done    = loadDone(selectedDate);
+  const today   = dateKey(new Date());
   const weekend = isWeekend(d);
 
   document.getElementById('dayName').textContent = DAYS_UZ[d.getDay()];
@@ -358,15 +370,15 @@ function render() {
 
   document.getElementById('todayBtn').classList.toggle('hidden', selectedDate === today);
   document.getElementById('nextBtn').disabled = selectedDate >= today;
+  document.getElementById('monthlyAlert').style.display = isWeek4(d) ? 'block' : 'none';
 
-  document.getElementById('dailySection').style.display   = weekend ? 'none' : 'block';
-  document.getElementById('weekendSection').style.display = weekend ? 'block' : 'none';
-  document.getElementById('monthlyAlert').style.display   = isWeek4(d) ? 'block' : 'none';
+  buildSchedule(weekend ? WEEKEND_SCHEDULE : WEEKDAY_SCHEDULE, done);
 
-  document.querySelectorAll('.task-item').forEach(el => {
-    el.classList.toggle('done', done.includes(el.dataset.id));
-  });
+  // solo_trip checkbox
+  const soloEl = document.querySelector('[data-id="solo_trip"]');
+  if (soloEl) soloEl.classList.toggle('done', done.includes('solo_trip'));
 
+  // progress
   const ids   = taskIds(selectedDate);
   const count = ids.filter(id => done.includes(id)).length;
   const pct   = ids.length ? Math.round(count / ids.length * 100) : 0;
@@ -383,8 +395,7 @@ function renderHistory() {
   grid.innerHTML = '';
 
   for (let i = 13; i >= 0; i--) {
-    const d   = new Date();
-    d.setDate(d.getDate() - i);
+    const d    = new Date(); d.setDate(d.getDate() - i);
     const key  = dateKey(d);
     const done = loadDone(key);
     const ids  = taskIds(key);
@@ -395,13 +406,11 @@ function renderHistory() {
     card.className = 'history-card' +
       (key === selectedDate ? ' active' : '') +
       (key === today        ? ' today-card' : '');
-
     card.innerHTML =
       '<div class="hc-day">' + DAYS_UZ[d.getDay()] + (key === today ? ' • Bugun' : '') + '</div>' +
       '<div class="hc-date">' + d.getDate() + ' ' + MONTHS_UZ[d.getMonth()] + '</div>' +
       '<div class="hc-bar-bg"><div class="hc-bar" style="width:' + pct + '%"></div></div>' +
-      '<div class="hc-pct' + (pct === 100 ? ' done-all' : '') + '">' + count + '/' + ids.length + ' — ' + pct + '%</div>';
-
+      '<div class="hc-pct' + (pct===100?' done-all':'') + '">' + count + '/' + ids.length + ' — ' + pct + '%</div>';
     card.addEventListener('click', function() { selectedDate = key; render(); });
     grid.appendChild(card);
   }
@@ -410,28 +419,18 @@ function renderHistory() {
 function toggle(id) {
   const done = loadDone(selectedDate);
   const idx  = done.indexOf(id);
-  if (idx >= 0) done.splice(idx, 1);
-  else done.push(id);
+  if (idx >= 0) done.splice(idx, 1); else done.push(id);
   saveDone(selectedDate, done);
   render();
 }
 
 function changeDay(dir) {
-  const d = parseDate(selectedDate);
-  d.setDate(d.getDate() + dir);
+  const d = parseDate(selectedDate); d.setDate(d.getDate() + dir);
   if (dateKey(d) > dateKey(new Date())) return;
-  selectedDate = dateKey(d);
-  render();
+  selectedDate = dateKey(d); render();
 }
 
-function goToday() {
-  selectedDate = dateKey(new Date());
-  render();
-}
-
-document.querySelectorAll('.task-item').forEach(el => {
-  el.addEventListener('click', function() { toggle(el.dataset.id); });
-});
+function goToday() { selectedDate = dateKey(new Date()); render(); }
 
 render();
 </script>
