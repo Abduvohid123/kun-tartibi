@@ -12,72 +12,110 @@
     background: #0f172a;
     color: #e2e8f0;
     min-height: 100vh;
-    padding: 20px;
+    padding: 16px;
   }
 
-  .container { max-width: 700px; margin: 0 auto; }
+  .container { max-width: 680px; margin: 0 auto; }
 
-  header {
-    text-align: center;
-    padding: 30px 0 20px;
+  /* NAV */
+  .day-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1e293b;
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    border: 1px solid #334155;
   }
 
-  header h1 {
-    font-size: 2rem;
+  .nav-btn {
+    background: #334155;
+    border: none;
+    color: #94a3b8;
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-btn:hover { background: #475569; color: #e2e8f0; }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  .day-info { text-align: center; flex: 1; }
+  .day-name {
+    font-size: 1.15rem;
     font-weight: 700;
     background: linear-gradient(135deg, #60a5fa, #a78bfa);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  .day-date { font-size: 0.82rem; color: #64748b; margin-top: 2px; }
 
-  .date-info {
-    margin-top: 8px;
-    font-size: 0.95rem;
-    color: #94a3b8;
+  .today-btn {
+    background: #1d4ed8;
+    border: none;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
   }
+  .today-btn:hover { background: #2563eb; }
+  .today-btn.hidden { visibility: hidden; pointer-events: none; }
 
-  .progress-bar-wrap {
-    margin: 20px 0;
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 14px; }
+  .progress-bar-bg {
     background: #1e293b;
     border-radius: 20px;
-    height: 12px;
+    height: 10px;
     overflow: hidden;
   }
-
   .progress-bar {
     height: 100%;
     background: linear-gradient(90deg, #60a5fa, #a78bfa);
     border-radius: 20px;
     transition: width 0.4s ease;
   }
+  .progress-text { text-align: center; font-size: 0.8rem; color: #64748b; margin-top: 5px; }
 
-  .progress-text {
+  /* MONTHLY ALERT */
+  .monthly-alert {
+    background: #064e3b;
+    border: 1px solid #065f46;
+    border-radius: 12px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    font-size: 0.9rem;
+    color: #6ee7b7;
     text-align: center;
-    font-size: 0.85rem;
-    color: #64748b;
-    margin-top: 6px;
+    display: none;
   }
 
+  /* SECTIONS */
   .section {
     background: #1e293b;
-    border-radius: 16px;
-    margin-bottom: 18px;
+    border-radius: 14px;
+    margin-bottom: 14px;
     overflow: hidden;
     border: 1px solid #334155;
   }
 
   .section-header {
-    padding: 14px 20px;
+    padding: 12px 18px;
     font-weight: 600;
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
-
   .section-header.daily   { background: #1d4ed8; }
   .section-header.weekend { background: #7c3aed; }
   .section-header.monthly { background: #065f46; }
@@ -85,35 +123,28 @@
   .task-item {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 13px 20px;
+    gap: 12px;
+    padding: 12px 18px;
     border-bottom: 1px solid #0f172a;
     cursor: pointer;
     transition: background 0.15s;
     user-select: none;
   }
-
   .task-item:last-child { border-bottom: none; }
   .task-item:hover { background: #263248; }
 
-  .task-item.done .task-label {
-    text-decoration: line-through;
-    color: #475569;
-  }
-
+  .task-item.done .task-label { text-decoration: line-through; color: #475569; }
   .task-item.done .checkbox { background: #3b82f6; border-color: #3b82f6; }
   .task-item.done .checkbox::after { opacity: 1; }
 
   .checkbox {
-    width: 22px;
-    height: 22px;
+    width: 22px; height: 22px;
     border-radius: 6px;
     border: 2px solid #475569;
     flex-shrink: 0;
     position: relative;
     transition: all 0.2s;
   }
-
   .checkbox::after {
     content: '';
     position: absolute;
@@ -126,91 +157,82 @@
     transition: opacity 0.2s;
   }
 
-  .task-label {
-    font-size: 1rem;
-    flex: 1;
-    transition: color 0.2s;
-  }
-
+  .task-label { font-size: 0.97rem; flex: 1; transition: color 0.2s; }
   .task-time {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: #60a5fa;
     background: #1e3a5f;
-    padding: 3px 8px;
+    padding: 2px 8px;
     border-radius: 20px;
     flex-shrink: 0;
   }
 
-  .weekend-note {
+  /* HISTORY */
+  .history-title {
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #64748b;
+    margin: 20px 0 10px;
+    padding-left: 4px;
+  }
+
+  .history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+    margin-bottom: 30px;
+  }
+
+  .history-card {
     background: #1e293b;
-    border: 1px solid #4c1d95;
+    border: 1px solid #334155;
     border-radius: 12px;
-    padding: 14px 20px;
-    margin-bottom: 18px;
-    font-size: 0.9rem;
-    color: #c4b5fd;
-    display: none;
-  }
-
-  .monthly-alert {
-    background: #064e3b;
-    border: 1px solid #065f46;
-    border-radius: 12px;
-    padding: 14px 20px;
-    margin-bottom: 18px;
-    font-size: 0.95rem;
-    color: #6ee7b7;
-    display: none;
-    text-align: center;
-  }
-
-  .reset-btn {
-    display: block;
-    margin: 10px auto 30px;
-    padding: 10px 28px;
-    background: #334155;
-    border: none;
-    border-radius: 10px;
-    color: #94a3b8;
-    font-size: 0.9rem;
+    padding: 10px 12px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: border-color 0.15s, background 0.15s;
   }
+  .history-card:hover { border-color: #60a5fa; background: #1a2a42; }
+  .history-card.active { border-color: #60a5fa; background: #1a2a42; }
+  .history-card.today-card { border-color: #a78bfa; }
 
-  .reset-btn:hover { background: #475569; color: #e2e8f0; }
-
-  .day-badge {
-    font-size: 0.75rem;
-    background: rgba(255,255,255,0.15);
-    padding: 2px 8px;
-    border-radius: 10px;
-  }
+  .hc-day { font-size: 0.75rem; color: #94a3b8; }
+  .hc-date { font-size: 0.95rem; font-weight: 600; margin: 2px 0 6px; }
+  .hc-bar-bg { background: #0f172a; border-radius: 10px; height: 5px; margin-bottom: 5px; overflow: hidden; }
+  .hc-bar { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #60a5fa, #a78bfa); }
+  .hc-pct { font-size: 0.75rem; color: #64748b; }
+  .hc-pct.done-all { color: #34d399; }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <header>
-    <h1>Kun Tartibim</h1>
-    <div class="date-info" id="dateInfo"></div>
-  </header>
-
-  <div class="progress-bar-wrap">
-    <div class="progress-bar" id="progressBar" style="width:0%"></div>
+  <!-- KUN NAVIGATSIYASI -->
+  <div class="day-nav">
+    <button class="nav-btn" id="prevBtn" onclick="changeDay(-1)">&#8592;</button>
+    <div class="day-info">
+      <div class="day-name" id="dayName"></div>
+      <div class="day-date" id="dayDate"></div>
+    </div>
+    <button class="today-btn hidden" id="todayBtn" onclick="goToday()">Bugun</button>
+    <button class="nav-btn" id="nextBtn" onclick="changeDay(1)">&#8594;</button>
   </div>
-  <div class="progress-text" id="progressText">0 / 0 vazifa bajarildi</div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar" id="progressBar" style="width:0%"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 / 0 vazifa</div>
+  </div>
 
   <div class="monthly-alert" id="monthlyAlert">
     🌍 Bu oyning 4-haftasi — o'zing uchun sayohat rejalashtirishni unutma!
   </div>
 
-  <!-- KUNDAVIK (HAFTA KUNLARI) -->
+  <!-- HAFTA KUNLARI -->
   <div class="section" id="dailySection">
-    <div class="section-header daily">
-      <span>☀️</span> Kundalik Vazifalar
-      <span class="day-badge" id="dayBadge"></span>
-    </div>
-
+    <div class="section-header daily">☀️ Kundalik Vazifalar</div>
     <div class="task-item" data-id="sleep">
       <div class="checkbox"></div>
       <span class="task-label">Soat 10–11 da uxlash</span>
@@ -233,7 +255,7 @@
     </div>
     <div class="task-item" data-id="work">
       <div class="checkbox"></div>
-      <span class="task-label">Ish (Jumagacha)</span>
+      <span class="task-label">Ish</span>
       <span class="task-time">Kun</span>
     </div>
     <div class="task-item" data-id="reading">
@@ -250,11 +272,7 @@
 
   <!-- SHANBA-YAKSHANBA -->
   <div class="section" id="weekendSection">
-    <div class="section-header weekend">
-      <span>🏡</span> Shanba – Yakshanba
-      <span class="day-badge" id="weekendBadge"></span>
-    </div>
-
+    <div class="section-header weekend">🏡 Shanba – Yakshanba</div>
     <div class="task-item" data-id="plan">
       <div class="checkbox"></div>
       <span class="task-label">Ishlarni rejalashtirish</span>
@@ -279,107 +297,140 @@
 
   <!-- OYLIK -->
   <div class="section">
-    <div class="section-header monthly">
-      <span>🗓️</span> Oylik Eslatma
-    </div>
+    <div class="section-header monthly">🗓️ Oylik Eslatma</div>
     <div class="task-item" data-id="solo_trip">
       <div class="checkbox"></div>
       <span class="task-label">O'zing uchun sayohat (4-hafta)</span>
-      <span class="task-time">Oy — 4-hafta</span>
+      <span class="task-time">4-hafta</span>
     </div>
   </div>
 
-  <button class="reset-btn" onclick="resetDay()">↺ Yangi kun — vazifalarni tozalash</button>
+  <!-- TARIX -->
+  <div class="history-title">📋 Oxirgi 14 kun tarixi</div>
+  <div class="history-grid" id="historyGrid"></div>
 
 </div>
 
 <script>
-const DAYS_UZ = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
-const MONTHS_UZ = ['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentabr','Oktabr','Noyabr','Dekabr'];
+const DAYS_UZ     = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+const MONTHS_UZ   = ['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentabr','Oktabr','Noyabr','Dekabr'];
+const WEEKDAY_IDS = ['sleep','fajr','breakfast','quran_arabic','work','reading','kids','solo_trip'];
+const WEEKEND_IDS = ['plan','family_trip','charity','quran_juz','reading_50','solo_trip'];
 
-function isWeekend(d) {
-  return d.getDay() === 0 || d.getDay() === 6;
+let selectedDate = dateKey(new Date());
+
+function dateKey(d) {
+  return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
 }
 
-function isWeek4(d) {
-  return d.getDate() >= 22 && d.getDate() <= 28;
+function pad(n) { return n < 10 ? '0'+n : ''+n; }
+
+function parseDate(key) {
+  const [y,m,d] = key.split('-').map(Number);
+  return new Date(y, m-1, d);
 }
 
-function getStorageKey() {
-  return 'tasks_' + new Date().toDateString();
-}
+function isWeekend(d) { return d.getDay() === 0 || d.getDay() === 6; }
+function isWeek4(d)   { return d.getDate() >= 22 && d.getDate() <= 28; }
 
-function loadDone() {
-  const raw = localStorage.getItem(getStorageKey());
+function loadDone(dKey) {
+  const raw = localStorage.getItem('tasks_' + dKey);
   return raw ? JSON.parse(raw) : [];
 }
 
-function saveDone(arr) {
-  localStorage.setItem(getStorageKey(), JSON.stringify(arr));
+function saveDone(dKey, arr) {
+  localStorage.setItem('tasks_' + dKey, JSON.stringify(arr));
 }
 
-function getVisibleTaskIds() {
-  const now = new Date();
-  const weekend = isWeekend(now);
-  const ids = [];
-  document.querySelectorAll('.task-item').forEach(el => {
-    const section = el.closest('.section');
-    if (!section) return;
-    if (section.id === 'weekendSection' && !weekend) return;
-    if (section.id === 'dailySection' && weekend) return;
-    ids.push(el.dataset.id);
-  });
-  return ids;
+function taskIds(dKey) {
+  return isWeekend(parseDate(dKey)) ? WEEKEND_IDS : WEEKDAY_IDS;
 }
 
 function render() {
-  const now = new Date();
-  const done = loadDone();
-  const weekend = isWeekend(now);
-  const dayName = DAYS_UZ[now.getDay()];
+  const d      = parseDate(selectedDate);
+  const done   = loadDone(selectedDate);
+  const today  = dateKey(new Date());
+  const weekend = isWeekend(d);
 
-  document.getElementById('dateInfo').textContent =
-    dayName + ', ' + now.getDate() + ' ' + MONTHS_UZ[now.getMonth()] + ' ' + now.getFullYear();
+  document.getElementById('dayName').textContent = DAYS_UZ[d.getDay()];
+  document.getElementById('dayDate').textContent =
+    d.getDate() + ' ' + MONTHS_UZ[d.getMonth()] + ' ' + d.getFullYear();
 
-  document.getElementById('dayBadge').textContent = dayName;
-  document.getElementById('weekendBadge').textContent = dayName;
+  document.getElementById('todayBtn').classList.toggle('hidden', selectedDate === today);
+  document.getElementById('nextBtn').disabled = selectedDate >= today;
 
-  document.getElementById('dailySection').style.display = weekend ? 'none' : 'block';
+  document.getElementById('dailySection').style.display   = weekend ? 'none' : 'block';
   document.getElementById('weekendSection').style.display = weekend ? 'block' : 'none';
-
-  document.getElementById('monthlyAlert').style.display = isWeek4(now) ? 'block' : 'none';
+  document.getElementById('monthlyAlert').style.display   = isWeek4(d) ? 'block' : 'none';
 
   document.querySelectorAll('.task-item').forEach(el => {
     el.classList.toggle('done', done.includes(el.dataset.id));
   });
 
-  const visibleIds = getVisibleTaskIds();
-  const doneCount = visibleIds.filter(id => done.includes(id)).length;
-  const total = visibleIds.length;
-  const pct = total ? Math.round(doneCount / total * 100) : 0;
+  const ids   = taskIds(selectedDate);
+  const count = ids.filter(id => done.includes(id)).length;
+  const pct   = ids.length ? Math.round(count / ids.length * 100) : 0;
   document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('progressText').textContent = doneCount + ' / ' + total + ' vazifa bajarildi (' + pct + '%)';
+  document.getElementById('progressText').textContent =
+    count + ' / ' + ids.length + ' vazifa bajarildi (' + pct + '%)';
 
+  renderHistory();
 }
 
-function toggle(id) {
-  const done = loadDone();
-  const idx = done.indexOf(id);
-  if (idx >= 0) done.splice(idx, 1);
-  else done.push(id);
-  saveDone(done);
-  render();
-}
+function renderHistory() {
+  const grid  = document.getElementById('historyGrid');
+  const today = dateKey(new Date());
+  grid.innerHTML = '';
 
-function resetDay() {
-  if (confirm('Bugungi barcha belgilar o\'chirilsinmi?')) {
-    localStorage.removeItem(getStorageKey());
-    render();
+  for (let i = 13; i >= 0; i--) {
+    const d   = new Date();
+    d.setDate(d.getDate() - i);
+    const key  = dateKey(d);
+    const done = loadDone(key);
+    const ids  = taskIds(key);
+    const count = ids.filter(id => done.includes(id)).length;
+    const pct   = ids.length ? Math.round(count / ids.length * 100) : 0;
+
+    const card = document.createElement('div');
+    card.className = 'history-card' +
+      (key === selectedDate ? ' active' : '') +
+      (key === today        ? ' today-card' : '');
+
+    card.innerHTML =
+      '<div class="hc-day">' + DAYS_UZ[d.getDay()] + (key === today ? ' • Bugun' : '') + '</div>' +
+      '<div class="hc-date">' + d.getDate() + ' ' + MONTHS_UZ[d.getMonth()] + '</div>' +
+      '<div class="hc-bar-bg"><div class="hc-bar" style="width:' + pct + '%"></div></div>' +
+      '<div class="hc-pct' + (pct === 100 ? ' done-all' : '') + '">' + count + '/' + ids.length + ' — ' + pct + '%</div>';
+
+    card.addEventListener('click', function() { selectedDate = key; render(); });
+    grid.appendChild(card);
   }
 }
 
+function toggle(id) {
+  const done = loadDone(selectedDate);
+  const idx  = done.indexOf(id);
+  if (idx >= 0) done.splice(idx, 1);
+  else done.push(id);
+  saveDone(selectedDate, done);
+  render();
+}
+
+function changeDay(dir) {
+  const d = parseDate(selectedDate);
+  d.setDate(d.getDate() + dir);
+  if (dateKey(d) > dateKey(new Date())) return;
+  selectedDate = dateKey(d);
+  render();
+}
+
+function goToday() {
+  selectedDate = dateKey(new Date());
+  render();
+}
+
 document.querySelectorAll('.task-item').forEach(el => {
-  el.addEventListener('click', () => toggle(el.dataset.id));
+  el.addEventListener('click', function() { toggle(el.dataset.id); });
 });
 
 render();
