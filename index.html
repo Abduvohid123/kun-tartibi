@@ -19,19 +19,14 @@
 
   /* NAV */
   .day-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #1e293b;
-    border-radius: 14px;
-    padding: 12px 16px;
-    margin-bottom: 14px;
-    border: 1px solid #334155;
+    display: flex; align-items: center; justify-content: space-between;
+    background: #1e293b; border-radius: 14px; padding: 12px 16px;
+    margin-bottom: 14px; border: 1px solid #334155;
   }
   .nav-btn {
     background: #334155; border: none; color: #94a3b8;
-    width: 36px; height: 36px; border-radius: 8px;
-    font-size: 1.1rem; cursor: pointer; transition: background 0.15s;
+    width: 36px; height: 36px; border-radius: 8px; font-size: 1.1rem;
+    cursor: pointer; transition: background 0.15s;
     display: flex; align-items: center; justify-content: center;
   }
   .nav-btn:hover { background: #475569; color: #e2e8f0; }
@@ -67,61 +62,61 @@
     color: #6ee7b7; text-align: center; display: none;
   }
 
+  /* PERIOD HEADER */
+  .period-header {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.07em;
+    text-transform: uppercase; color: #94a3b8;
+    margin: 16px 0 8px;
+  }
+
   /* TIMELINE */
-  .timeline { position: relative; padding-left: 70px; margin-bottom: 14px; }
+  .timeline { position: relative; padding-left: 70px; margin-bottom: 6px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 56px; top: 0; bottom: 0;
+    width: 2px; background: #1e3a5f; border-radius: 2px;
+  }
 
   .time-group { position: relative; margin-bottom: 6px; }
 
+  /* TIME LABEL — bosish mumkin */
   .time-label {
-    position: absolute;
-    left: -70px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.78rem;
-    color: #60a5fa;
-    font-weight: 600;
-    width: 58px;
-    text-align: right;
-    line-height: 1.2;
+    position: absolute; left: -70px; top: 50%; transform: translateY(-50%);
+    width: 58px; text-align: right;
+    font-size: 0.78rem; color: #60a5fa; font-weight: 600; line-height: 1.2;
+    cursor: pointer; border-radius: 6px; padding: 2px 4px;
+    transition: background 0.15s;
+    z-index: 2;
   }
+  .time-label:hover { background: #1e3a5f; color: #93c5fd; }
+  .time-label.edited { color: #a78bfa; }
 
-  /* vertical line */
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 56px;
-    top: 0; bottom: 0;
-    width: 2px;
-    background: #1e3a5f;
-    border-radius: 2px;
+  /* TIME INPUT (inline) */
+  .time-input {
+    position: absolute; left: -74px; top: 50%; transform: translateY(-50%);
+    width: 66px; background: #1e3a5f; border: 1px solid #60a5fa;
+    color: #e2e8f0; font-size: 0.78rem; font-weight: 600;
+    border-radius: 6px; padding: 3px 4px; text-align: center;
+    outline: none; z-index: 10;
+    /* hide native time picker arrow on some browsers */
+    -webkit-appearance: none;
   }
+  .time-input::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.5; width: 10px; }
 
   .time-dot {
-    position: absolute;
-    left: -17px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: #1e3a5f;
-    border: 2px solid #334155;
-    transition: background 0.2s, border-color 0.2s;
-    z-index: 1;
+    position: absolute; left: -17px; top: 50%; transform: translateY(-50%);
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #1e3a5f; border: 2px solid #334155;
+    transition: background 0.2s, border-color 0.2s; z-index: 1;
   }
 
+  /* TASK CARD */
   .task-item {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 14px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    cursor: pointer;
+    position: relative; display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px; background: #1e293b; border: 1px solid #334155;
+    border-radius: 12px; cursor: pointer;
     transition: background 0.15s, border-color 0.15s;
-    user-select: none;
-    margin-bottom: 6px;
+    user-select: none; margin-bottom: 0;
   }
   .task-item:hover { background: #263248; border-color: #475569; }
   .task-item.done { border-color: #1e3a5f; }
@@ -135,36 +130,22 @@
     border: 2px solid #475569; flex-shrink: 0; position: relative; transition: all 0.2s;
   }
   .checkbox::after {
-    content: ''; position: absolute;
-    top: 3px; left: 6px; width: 6px; height: 11px;
+    content: ''; position: absolute; top: 3px; left: 6px; width: 6px; height: 11px;
     border: 2px solid #fff; border-top: none; border-left: none;
     transform: rotate(45deg); opacity: 0; transition: opacity 0.2s;
   }
 
-  .task-main { flex: 1; }
+  .task-main { flex: 1; min-width: 0; }
   .task-label { font-size: 0.95rem; display: block; }
-  .task-duration {
-    font-size: 0.75rem; color: #64748b; margin-top: 2px; display: block;
-  }
-
-  /* SECTION HEADERS */
-  .period-header {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.07em;
-    text-transform: uppercase; color: #94a3b8;
-    margin: 16px 0 8px;
-    padding-left: 0;
-  }
-  .period-header span { opacity: 0.7; }
+  .task-duration { font-size: 0.75rem; color: #64748b; margin-top: 2px; display: block; }
 
   /* MONTHLY */
   .monthly-section {
     background: #1e293b; border-radius: 14px;
     border: 1px solid #065f46; margin-bottom: 14px; overflow: hidden;
   }
-  .monthly-section .section-header {
-    background: #065f46; padding: 10px 16px;
-    font-size: 0.82rem; font-weight: 600;
+  .monthly-section .sec-head {
+    background: #065f46; padding: 10px 16px; font-size: 0.82rem; font-weight: 600;
     letter-spacing: 0.06em; text-transform: uppercase;
     display: flex; align-items: center; gap: 8px;
   }
@@ -172,6 +153,14 @@
     border-radius: 0; border: none; border-bottom: 1px solid #0f172a; margin: 0;
   }
   .monthly-section .task-item:last-child { border-bottom: none; }
+
+  /* RESET TIMES */
+  .reset-times {
+    background: none; border: 1px solid #334155; color: #64748b;
+    padding: 6px 14px; border-radius: 8px; font-size: 0.78rem;
+    cursor: pointer; margin-bottom: 16px; transition: all 0.15s;
+  }
+  .reset-times:hover { border-color: #475569; color: #94a3b8; }
 
   /* HISTORY */
   .history-title {
@@ -200,7 +189,6 @@
 <body>
 <div class="container">
 
-  <!-- NAV -->
   <div class="day-nav">
     <button class="nav-btn" id="prevBtn" onclick="changeDay(-1)">&#8592;</button>
     <div class="day-info">
@@ -211,11 +199,8 @@
     <button class="nav-btn" id="nextBtn" onclick="changeDay(1)">&#8594;</button>
   </div>
 
-  <!-- PROGRESS -->
   <div class="progress-wrap">
-    <div class="progress-bar-bg">
-      <div class="progress-bar" id="progressBar" style="width:0%"></div>
-    </div>
+    <div class="progress-bar-bg"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
     <div class="progress-text" id="progressText"></div>
   </div>
 
@@ -223,12 +208,10 @@
     🌍 Bu oyning 4-haftasi — o'zing uchun sayohat rejalashtirishni unutma!
   </div>
 
-  <!-- JADVAL -->
   <div id="schedule"></div>
 
-  <!-- OYLIK -->
   <div class="monthly-section">
-    <div class="section-header">🗓️ Oylik eslatma</div>
+    <div class="sec-head">🗓️ Oylik eslatma</div>
     <div class="task-item" data-id="solo_trip" onclick="toggle('solo_trip')">
       <div class="checkbox"></div>
       <div class="task-main">
@@ -238,7 +221,8 @@
     </div>
   </div>
 
-  <!-- TARIX -->
+  <button class="reset-times" onclick="resetTimes()">↺ Soatlarni asl holatga qaytarish</button>
+
   <div class="history-title">📋 Oxirgi 14 kun tarixi</div>
   <div class="history-grid" id="historyGrid"></div>
 
@@ -248,109 +232,136 @@
 const DAYS_UZ   = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
 const MONTHS_UZ = ['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentabr','Oktabr','Noyabr','Dekabr'];
 
-// Hafta kunlari jadvali
-const WEEKDAY_SCHEDULE = [
+const DEFAULT_WEEKDAY = [
   { period: '🌙 Kecha', items: [
-    { id: 'sleep', label: 'Uxlash', duration: '2 soat', time: '22:00' }
+    { id: 'sleep',        label: 'Uxlash',                 duration: '2 soat',       time: '22:00' }
   ]},
   { period: '🌅 Ertalab', items: [
-    { id: 'fajr',        label: 'Bomdod + Badantarbiya', duration: '30–40 daqiqa', time: '05:00' },
-    { id: 'quran_arabic',label: "Qur'on + Arab tili",    duration: '1 soat',       time: '05:45' },
-    { id: 'breakfast',   label: 'Nonushta',              duration: '20 daqiqa',    time: '07:00' },
+    { id: 'fajr',         label: 'Bomdod + Badantarbiya',  duration: '30–40 daqiqa', time: '05:00' },
+    { id: 'quran_arabic', label: "Qur'on + Arab tili",     duration: '1 soat',       time: '05:45' },
+    { id: 'breakfast',    label: 'Nonushta',               duration: '20 daqiqa',    time: '07:00' },
   ]},
   { period: '☀️ Kun', items: [
-    { id: 'work', label: 'Ish', duration: '8 soat', time: '09:00' },
+    { id: 'work',         label: 'Ish',                    duration: '8 soat',       time: '09:00' },
   ]},
   { period: '🌆 Kechqurun', items: [
-    { id: 'reading', label: 'Kitob o\'qish (30 bet)', duration: '45–60 daqiqa', time: '18:00' },
-    { id: 'kids',    label: 'Bolalarga vaqt',         duration: '1 soat',       time: '19:00' },
+    { id: 'reading',      label: "Kitob o'qish (30 bet)",  duration: '45–60 daqiqa', time: '18:00' },
+    { id: 'kids',         label: 'Bolalarga vaqt',         duration: '1 soat',       time: '19:00' },
   ]},
 ];
 
-// Shanba-Yakshanba jadvali
-const WEEKEND_SCHEDULE = [
+const DEFAULT_WEEKEND = [
   { period: '🌙 Kecha', items: [
-    { id: 'sleep', label: 'Uxlash', duration: '2 soat', time: '22:00' }
+    { id: 'sleep',        label: 'Uxlash',                 duration: '2 soat',       time: '22:00' }
   ]},
   { period: '🌅 Ertalab', items: [
-    { id: 'fajr',        label: 'Bomdod + Badantarbiya', duration: '30–40 daqiqa', time: '05:00' },
-    { id: 'quran_juz',   label: "Kamida 1 pora Qur'on",  duration: '1 soat',       time: '05:45' },
-    { id: 'lecture',     label: 'Maruza eshitish',        duration: '1 soat',       time: '07:00' },
-    { id: 'breakfast',   label: 'Nonushta',               duration: '20 daqiqa',    time: '08:00' },
+    { id: 'fajr',         label: 'Bomdod + Badantarbiya',  duration: '30–40 daqiqa', time: '05:00' },
+    { id: 'quran_juz',    label: "Kamida 1 pora Qur'on",   duration: '1 soat',       time: '05:45' },
+    { id: 'lecture',      label: 'Maruza eshitish',        duration: '1 soat',       time: '07:00' },
+    { id: 'breakfast',    label: 'Nonushta',               duration: '20 daqiqa',    time: '08:00' },
   ]},
   { period: '☀️ Kun', items: [
-    { id: 'plan',        label: 'Ishlarni rejalashtirish', duration: '1 soat',   time: '09:00' },
-    { id: 'family_trip', label: 'Oilaviy sayohat',         duration: '3–4 soat', time: '10:00' },
+    { id: 'plan',         label: 'Ishlarni rejalashtirish', duration: '1 soat',      time: '09:00' },
+    { id: 'family_trip',  label: 'Oilaviy sayohat',        duration: '3–4 soat',     time: '10:00' },
   ]},
   { period: '🌆 Kechqurun', items: [
-    { id: 'reading_50', label: 'Kitob o\'qish (50 bet)', duration: '1.5 soat', time: '15:00' },
-    { id: 'charity',    label: 'Ehson + Qarindoshlar',   duration: '1–2 soat', time: '16:30' },
+    { id: 'reading_50',   label: "Kitob o'qish (50 bet)",  duration: '1.5 soat',     time: '15:00' },
+    { id: 'charity',      label: 'Ehson + Qarindoshlar',   duration: '1–2 soat',     time: '16:30' },
   ]},
 ];
 
-const WEEKDAY_IDS = WEEKDAY_SCHEDULE.flatMap(g => g.items.map(i => i.id)).concat(['solo_trip']);
-const WEEKEND_IDS = WEEKEND_SCHEDULE.flatMap(g => g.items.map(i => i.id)).concat(['solo_trip']);
+function allIds(schedule) {
+  return schedule.flatMap(g => g.items.map(i => i.id)).concat(['solo_trip']);
+}
+
+const WEEKDAY_IDS = allIds(DEFAULT_WEEKDAY);
+const WEEKEND_IDS = allIds(DEFAULT_WEEKEND);
 
 let selectedDate = dateKey(new Date());
 
-function dateKey(d) {
-  return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
-}
-function pad(n) { return n < 10 ? '0'+n : ''+n; }
-function parseDate(key) { const [y,m,d] = key.split('-').map(Number); return new Date(y,m-1,d); }
-function isWeekend(d)   { return d.getDay() === 0 || d.getDay() === 6; }
-function isWeek4(d)     { return d.getDate() >= 22 && d.getDate() <= 28; }
+/* ── helpers ── */
+function dateKey(d) { return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function pad(n)     { return n < 10 ? '0'+n : ''+n; }
+function parseDate(k){ const [y,m,d]=k.split('-').map(Number); return new Date(y,m-1,d); }
+function isWeekend(d){ return d.getDay()===0||d.getDay()===6; }
+function isWeek4(d)  { return d.getDate()>=22&&d.getDate()<=28; }
 
-function loadDone(dKey) {
-  const raw = localStorage.getItem('tasks_' + dKey);
-  return raw ? JSON.parse(raw) : [];
+/* ── tasks storage ── */
+function loadDone(k)    { const r=localStorage.getItem('tasks_'+k); return r?JSON.parse(r):[]; }
+function saveDone(k,arr){ localStorage.setItem('tasks_'+k,JSON.stringify(arr)); }
+function taskIds(k)     { return isWeekend(parseDate(k))?WEEKEND_IDS:WEEKDAY_IDS; }
+
+/* ── custom times storage ── */
+function loadTimes() {
+  const r = localStorage.getItem('custom_times');
+  return r ? JSON.parse(r) : {};
 }
-function saveDone(dKey, arr) {
-  localStorage.setItem('tasks_' + dKey, JSON.stringify(arr));
+function saveTime(id, val) {
+  const t = loadTimes(); t[id] = val;
+  localStorage.setItem('custom_times', JSON.stringify(t));
 }
-function taskIds(dKey) {
-  return isWeekend(parseDate(dKey)) ? WEEKEND_IDS : WEEKDAY_IDS;
+function resetTimes() {
+  if (confirm("Barcha soatlar asl holatiga qaytarilsinmi?")) {
+    localStorage.removeItem('custom_times');
+    render();
+  }
+}
+function getTime(id, defaultTime) {
+  const t = loadTimes();
+  return t[id] || defaultTime;
 }
 
+/* ── build schedule DOM ── */
 function buildSchedule(schedule, done) {
   const container = document.getElementById('schedule');
   container.innerHTML = '';
+  const customTimes = loadTimes();
 
   schedule.forEach(group => {
     const header = document.createElement('div');
     header.className = 'period-header';
-    header.innerHTML = '<span>' + group.period + '</span>';
+    header.textContent = group.period;
     container.appendChild(header);
 
     const timeline = document.createElement('div');
     timeline.className = 'timeline';
 
     group.items.forEach(item => {
+      const currentTime = customTimes[item.id] || item.time;
+      const isEdited    = !!customTimes[item.id];
+
       const wrap = document.createElement('div');
       wrap.className = 'time-group';
 
+      // dot
       const dot = document.createElement('div');
       dot.className = 'time-dot';
 
-      const timeLabel = document.createElement('div');
-      timeLabel.className = 'time-label';
-      timeLabel.textContent = item.time;
+      // time label (click to edit)
+      const label = document.createElement('div');
+      label.className = 'time-label' + (isEdited ? ' edited' : '');
+      label.textContent = currentTime;
+      label.title = 'Soatni o\'zgartirish uchun bosing';
+      label.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openTimeEditor(label, item.id, currentTime);
+      });
 
-      const taskEl = document.createElement('div');
-      taskEl.className = 'task-item' + (done.includes(item.id) ? ' done' : '');
-      taskEl.dataset.id = item.id;
-      taskEl.innerHTML =
+      // task card
+      const card = document.createElement('div');
+      card.className = 'task-item' + (done.includes(item.id) ? ' done' : '');
+      card.dataset.id = item.id;
+      card.innerHTML =
         '<div class="checkbox"></div>' +
         '<div class="task-main">' +
           '<span class="task-label">' + item.label + '</span>' +
           '<span class="task-duration">' + item.duration + '</span>' +
         '</div>';
+      card.addEventListener('click', function() { toggle(item.id); });
 
-      taskEl.addEventListener('click', function() { toggle(item.id); });
-
-      wrap.appendChild(timeLabel);
+      wrap.appendChild(label);
       wrap.appendChild(dot);
-      wrap.appendChild(taskEl);
+      wrap.appendChild(card);
       timeline.appendChild(wrap);
     });
 
@@ -358,6 +369,40 @@ function buildSchedule(schedule, done) {
   });
 }
 
+/* ── inline time editor ── */
+function openTimeEditor(labelEl, id, currentTime) {
+  // agar allaqachon input ochiq bo'lsa — yopamiz
+  const existing = labelEl.parentNode.querySelector('.time-input');
+  if (existing) { existing.remove(); labelEl.style.visibility = 'visible'; return; }
+
+  labelEl.style.visibility = 'hidden';
+
+  const input = document.createElement('input');
+  input.type  = 'time';
+  input.value = currentTime;
+  input.className = 'time-input';
+
+  function confirm() {
+    const val = input.value;
+    if (val) {
+      saveTime(id, val);
+    }
+    input.remove();
+    render();
+  }
+
+  input.addEventListener('change', confirm);
+  input.addEventListener('blur',   confirm);
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') confirm();
+    if (e.key === 'Escape') { input.remove(); labelEl.style.visibility = 'visible'; }
+  });
+
+  labelEl.parentNode.insertBefore(input, labelEl);
+  input.focus();
+}
+
+/* ── main render ── */
 function render() {
   const d       = parseDate(selectedDate);
   const done    = loadDone(selectedDate);
@@ -372,13 +417,11 @@ function render() {
   document.getElementById('nextBtn').disabled = selectedDate >= today;
   document.getElementById('monthlyAlert').style.display = isWeek4(d) ? 'block' : 'none';
 
-  buildSchedule(weekend ? WEEKEND_SCHEDULE : WEEKDAY_SCHEDULE, done);
+  buildSchedule(weekend ? DEFAULT_WEEKEND : DEFAULT_WEEKDAY, done);
 
-  // solo_trip checkbox
   const soloEl = document.querySelector('[data-id="solo_trip"]');
   if (soloEl) soloEl.classList.toggle('done', done.includes('solo_trip'));
 
-  // progress
   const ids   = taskIds(selectedDate);
   const count = ids.filter(id => done.includes(id)).length;
   const pct   = ids.length ? Math.round(count / ids.length * 100) : 0;
@@ -393,24 +436,21 @@ function renderHistory() {
   const grid  = document.getElementById('historyGrid');
   const today = dateKey(new Date());
   grid.innerHTML = '';
-
   for (let i = 13; i >= 0; i--) {
-    const d    = new Date(); d.setDate(d.getDate() - i);
-    const key  = dateKey(d);
+    const d   = new Date(); d.setDate(d.getDate() - i);
+    const key = dateKey(d);
     const done = loadDone(key);
     const ids  = taskIds(key);
     const count = ids.filter(id => done.includes(id)).length;
     const pct   = ids.length ? Math.round(count / ids.length * 100) : 0;
-
-    const card = document.createElement('div');
+    const card  = document.createElement('div');
     card.className = 'history-card' +
-      (key === selectedDate ? ' active' : '') +
-      (key === today        ? ' today-card' : '');
+      (key === selectedDate ? ' active' : '') + (key === today ? ' today-card' : '');
     card.innerHTML =
-      '<div class="hc-day">' + DAYS_UZ[d.getDay()] + (key === today ? ' • Bugun' : '') + '</div>' +
+      '<div class="hc-day">' + DAYS_UZ[d.getDay()] + (key===today?' • Bugun':'') + '</div>' +
       '<div class="hc-date">' + d.getDate() + ' ' + MONTHS_UZ[d.getMonth()] + '</div>' +
-      '<div class="hc-bar-bg"><div class="hc-bar" style="width:' + pct + '%"></div></div>' +
-      '<div class="hc-pct' + (pct===100?' done-all':'') + '">' + count + '/' + ids.length + ' — ' + pct + '%</div>';
+      '<div class="hc-bar-bg"><div class="hc-bar" style="width:'+pct+'%"></div></div>' +
+      '<div class="hc-pct'+(pct===100?' done-all':'')+'">'+count+'/'+ids.length+' — '+pct+'%</div>';
     card.addEventListener('click', function() { selectedDate = key; render(); });
     grid.appendChild(card);
   }
@@ -419,13 +459,13 @@ function renderHistory() {
 function toggle(id) {
   const done = loadDone(selectedDate);
   const idx  = done.indexOf(id);
-  if (idx >= 0) done.splice(idx, 1); else done.push(id);
+  if (idx >= 0) done.splice(idx,1); else done.push(id);
   saveDone(selectedDate, done);
   render();
 }
 
 function changeDay(dir) {
-  const d = parseDate(selectedDate); d.setDate(d.getDate() + dir);
+  const d = parseDate(selectedDate); d.setDate(d.getDate()+dir);
   if (dateKey(d) > dateKey(new Date())) return;
   selectedDate = dateKey(d); render();
 }
