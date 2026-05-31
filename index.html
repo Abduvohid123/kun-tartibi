@@ -351,7 +351,7 @@
         <div class="exp-month-name" id="expMonthName"></div>
         <div class="exp-month-year" id="expMonthYear"></div>
       </div>
-      <button class="nav-btn" id="expThisMonthBtn" onclick="goExpThisMonth()">Bu oy</button>
+      <button class="today-btn hidden" id="expThisMonthBtn" onclick="goExpThisMonth()">Bu oy</button>
       <button class="nav-btn" onclick="changeExpMonth(1)" id="expNextMonthBtn">&#8594;</button>
     </div>
 
@@ -810,7 +810,7 @@ function renderExpense(){
   const thisMk = monthKey(new Date());
   document.getElementById('expMonthName').textContent = MONTHS_UZ[d.getMonth()];
   document.getElementById('expMonthYear').textContent = d.getFullYear()+' yil';
-  document.getElementById('expThisMonthBtn').style.visibility = expMonthKey===thisMk?'hidden':'visible';
+  document.getElementById('expThisMonthBtn').classList.toggle('hidden', expMonthKey===thisMk);
 
   // default date — flatpickr o'zi 'today' qiladi, qo'lda tegilmaydi
 
