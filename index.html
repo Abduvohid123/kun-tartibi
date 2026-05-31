@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kun Tartibim</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/uz.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -235,8 +238,32 @@
   .exp-input:focus { border-color: #34d399; }
   .exp-input::placeholder { color: var(--text4); }
   .exp-input.amount { width: 130px; flex: none; }
-  .exp-date-input { background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 10px 12px; font-size: 0.88rem; outline: none; cursor: pointer; transition: border-color 0.15s; }
+  .exp-date-input { background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 10px 12px; font-size: 0.88rem; outline: none; cursor: pointer; transition: border-color 0.15s; min-width: 130px; }
   .exp-date-input:focus { border-color: #34d399; }
+
+  /* flatpickr tema override */
+  .flatpickr-calendar { background: var(--bg2) !important; border: 1px solid var(--border) !important; border-radius: 14px !important; box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important; font-family: 'Segoe UI', sans-serif !important; }
+  .flatpickr-calendar.arrowTop:before, .flatpickr-calendar.arrowTop:after { border-bottom-color: var(--border) !important; }
+  .flatpickr-months { background: var(--bg2) !important; border-radius: 14px 14px 0 0 !important; padding: 8px 0 4px !important; }
+  .flatpickr-month { color: var(--text) !important; }
+  .flatpickr-current-month { color: var(--text) !important; font-size: 1rem !important; }
+  .flatpickr-current-month input.cur-year { color: var(--text) !important; }
+  .flatpickr-monthDropdown-months { background: var(--bg2) !important; color: var(--text) !important; }
+  .flatpickr-prev-month, .flatpickr-next-month { color: var(--text2) !important; fill: var(--text2) !important; }
+  .flatpickr-prev-month:hover, .flatpickr-next-month:hover { color: var(--text) !important; fill: var(--text) !important; }
+  .flatpickr-weekdays { background: var(--bg2) !important; }
+  .flatpickr-weekday { color: var(--text3) !important; background: var(--bg2) !important; font-size: 0.78rem !important; }
+  .flatpickr-days { border-color: var(--border) !important; }
+  .dayContainer { background: var(--bg2) !important; }
+  .flatpickr-day { color: var(--text) !important; border-radius: 8px !important; }
+  .flatpickr-day:hover { background: var(--bg3) !important; border-color: var(--border) !important; }
+  .flatpickr-day.today { border-color: #34d399 !important; color: #34d399 !important; font-weight: 700 !important; }
+  .flatpickr-day.today:hover { background: #064e3b !important; }
+  .flatpickr-day.selected { background: #065f46 !important; border-color: #059669 !important; color: #34d399 !important; font-weight: 700 !important; }
+  .flatpickr-day.selected:hover { background: #047857 !important; }
+  .flatpickr-day.flatpickr-disabled { color: var(--text4) !important; opacity: 0.4; }
+  .flatpickr-day.inRange { background: #064e3b !important; border-color: transparent !important; color: #6ee7b7 !important; }
+  .numInputWrapper:hover { background: var(--bg3) !important; }
   .exp-cat-row { display: flex; gap: 6px; flex-wrap: wrap; }
   .exp-cat-btn { padding: 5px 10px; border-radius: 20px; font-size: 0.78rem; border: 1px solid var(--border); background: transparent; color: var(--text3); cursor: pointer; transition: all 0.15s; }
   .exp-cat-btn.active { background: #065f46; border-color: #059669; color: #34d399; }
@@ -907,9 +934,20 @@ function applyTheme(){
   }
 }
 
+/* ═══════════ FLATPICKR ═══════════ */
+function initFlatpickr(){
+  const opts = { locale: 'uz', dateFormat: 'Y-m-d', disableMobile: true };
+
+  flatpickr('#expDate',    { ...opts, defaultDate: 'today' });
+  flatpickr('#filterFrom', { ...opts, onChange: ()=>{ if(document.getElementById('filterFrom').value && document.getElementById('filterTo').value) applyFilter(); } });
+  flatpickr('#filterTo',   { ...opts, onChange: ()=>{ if(document.getElementById('filterFrom').value && document.getElementById('filterTo').value) applyFilter(); } });
+}
+
 /* INIT */
 applyTheme();
 renderDaily();
+// flatpickr ni expense tab ochilganda ham ishlashi uchun kechiktirmasdan init qilamiz
+setTimeout(initFlatpickr, 0);
 </script>
 </body>
 </html>
