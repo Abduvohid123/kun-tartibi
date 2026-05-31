@@ -9,13 +9,27 @@
 
   body {
     font-family: 'Segoe UI', sans-serif;
-    background: #0f172a;
-    color: #e2e8f0;
-    min-height: 100vh;
-    padding: 16px;
+    background: #0f172a; color: #e2e8f0;
+    min-height: 100vh; padding: 16px;
   }
-
   .container { max-width: 680px; margin: 0 auto; }
+
+  /* TABS */
+  .tabs {
+    display: flex; gap: 6px; margin-bottom: 16px;
+    background: #1e293b; border-radius: 12px; padding: 4px;
+    border: 1px solid #334155;
+  }
+  .tab-btn {
+    flex: 1; padding: 9px; border: none; border-radius: 9px;
+    font-size: 0.88rem; font-weight: 600; cursor: pointer;
+    background: transparent; color: #64748b; transition: all 0.2s;
+  }
+  .tab-btn.active { background: #334155; color: #e2e8f0; }
+  .tab-btn:hover:not(.active) { color: #94a3b8; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
 
   /* NAV */
   .day-nav {
@@ -31,13 +45,13 @@
   }
   .nav-btn:hover { background: #475569; color: #e2e8f0; }
   .nav-btn:disabled { opacity: 0.3; cursor: default; }
-  .day-info { text-align: center; flex: 1; }
-  .day-name {
+  .nav-info { text-align: center; flex: 1; }
+  .nav-main {
     font-size: 1.15rem; font-weight: 700;
     background: linear-gradient(135deg, #60a5fa, #a78bfa);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .day-date { font-size: 0.82rem; color: #64748b; margin-top: 2px; }
+  .nav-sub { font-size: 0.82rem; color: #64748b; margin-top: 2px; }
   .today-btn {
     background: #1d4ed8; border: none; color: #fff;
     padding: 6px 12px; border-radius: 8px; font-size: 0.8rem;
@@ -55,7 +69,6 @@
   }
   .progress-text { text-align: center; font-size: 0.8rem; color: #64748b; margin-top: 5px; }
 
-  /* MONTHLY ALERT */
   .monthly-alert {
     background: #064e3b; border: 1px solid #065f46; border-radius: 12px;
     padding: 12px 18px; margin-bottom: 14px; font-size: 0.9rem;
@@ -64,10 +77,8 @@
 
   /* PERIOD HEADER */
   .period-header {
-    display: flex; align-items: center; gap: 8px;
     font-size: 0.78rem; font-weight: 700; letter-spacing: 0.07em;
-    text-transform: uppercase; color: #94a3b8;
-    margin: 16px 0 8px;
+    text-transform: uppercase; color: #94a3b8; margin: 16px 0 8px;
   }
 
   /* TIMELINE */
@@ -76,33 +87,22 @@
     content: ''; position: absolute; left: 56px; top: 0; bottom: 0;
     width: 2px; background: #1e3a5f; border-radius: 2px;
   }
-
   .time-group { position: relative; margin-bottom: 6px; }
-
-  /* TIME LABEL — bosish mumkin */
   .time-label {
     position: absolute; left: -70px; top: 50%; transform: translateY(-50%);
-    width: 58px; text-align: right;
-    font-size: 0.78rem; color: #60a5fa; font-weight: 600; line-height: 1.2;
-    cursor: pointer; border-radius: 6px; padding: 2px 4px;
-    transition: background 0.15s;
-    z-index: 2;
+    width: 58px; text-align: right; font-size: 0.78rem; color: #60a5fa;
+    font-weight: 600; line-height: 1.2; cursor: pointer; border-radius: 6px;
+    padding: 2px 4px; transition: background 0.15s; z-index: 2;
   }
   .time-label:hover { background: #1e3a5f; color: #93c5fd; }
   .time-label.edited { color: #a78bfa; }
-
-  /* TIME INPUT (inline) */
   .time-input {
     position: absolute; left: -74px; top: 50%; transform: translateY(-50%);
     width: 66px; background: #1e3a5f; border: 1px solid #60a5fa;
     color: #e2e8f0; font-size: 0.78rem; font-weight: 600;
-    border-radius: 6px; padding: 3px 4px; text-align: center;
-    outline: none; z-index: 10;
-    /* hide native time picker arrow on some browsers */
-    -webkit-appearance: none;
+    border-radius: 6px; padding: 3px 4px; text-align: center; outline: none; z-index: 10;
   }
   .time-input::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.5; width: 10px; }
-
   .time-dot {
     position: absolute; left: -17px; top: 50%; transform: translateY(-50%);
     width: 10px; height: 10px; border-radius: 50%;
@@ -115,8 +115,7 @@
     position: relative; display: flex; align-items: center; gap: 12px;
     padding: 11px 14px; background: #1e293b; border: 1px solid #334155;
     border-radius: 12px; cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-    user-select: none; margin-bottom: 0;
+    transition: background 0.15s, border-color 0.15s; user-select: none;
   }
   .task-item:hover { background: #263248; border-color: #475569; }
   .task-item.done { border-color: #1e3a5f; }
@@ -124,7 +123,6 @@
   .task-item.done .checkbox { background: #3b82f6; border-color: #3b82f6; }
   .task-item.done .checkbox::after { opacity: 1; }
   .task-item.done .time-dot { background: #3b82f6; border-color: #3b82f6; }
-
   .checkbox {
     width: 22px; height: 22px; border-radius: 6px;
     border: 2px solid #475569; flex-shrink: 0; position: relative; transition: all 0.2s;
@@ -134,27 +132,24 @@
     border: 2px solid #fff; border-top: none; border-left: none;
     transform: rotate(45deg); opacity: 0; transition: opacity 0.2s;
   }
-
   .task-main { flex: 1; min-width: 0; }
   .task-label { font-size: 0.95rem; display: block; }
   .task-duration { font-size: 0.75rem; color: #64748b; margin-top: 2px; display: block; }
 
-  /* MONTHLY */
+  /* MONTHLY SECTION (oylik eslatma) */
   .monthly-section {
     background: #1e293b; border-radius: 14px;
     border: 1px solid #065f46; margin-bottom: 14px; overflow: hidden;
   }
   .monthly-section .sec-head {
     background: #065f46; padding: 10px 16px; font-size: 0.82rem; font-weight: 600;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    display: flex; align-items: center; gap: 8px;
+    letter-spacing: 0.06em; text-transform: uppercase; display: flex; align-items: center; gap: 8px;
   }
   .monthly-section .task-item {
     border-radius: 0; border: none; border-bottom: 1px solid #0f172a; margin: 0;
   }
   .monthly-section .task-item:last-child { border-bottom: none; }
 
-  /* RESET TIMES */
   .reset-times {
     background: none; border: 1px solid #334155; color: #64748b;
     padding: 6px 14px; border-radius: 8px; font-size: 0.78rem;
@@ -163,7 +158,7 @@
   .reset-times:hover { border-color: #475569; color: #94a3b8; }
 
   /* HISTORY */
-  .history-title {
+  .section-title {
     font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase;
     color: #64748b; margin: 20px 0 10px; padding-left: 4px;
   }
@@ -184,295 +179,506 @@
   .hc-bar { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #60a5fa, #a78bfa); }
   .hc-pct { font-size: 0.72rem; color: #64748b; }
   .hc-pct.done-all { color: #34d399; }
+
+  /* ═══ OYLIK REJALAR TAB ═══ */
+  .month-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #1e293b; border-radius: 14px; padding: 12px 16px;
+    margin-bottom: 16px; border: 1px solid #334155;
+  }
+  .month-nav-info { text-align: center; flex: 1; }
+  .month-nav-name {
+    font-size: 1.2rem; font-weight: 700;
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .month-nav-year { font-size: 0.82rem; color: #64748b; margin-top: 2px; }
+
+  .plans-progress-wrap { margin-bottom: 16px; }
+  .plans-progress-bg { background: #1e293b; border-radius: 20px; height: 10px; overflow: hidden; }
+  .plans-progress-bar {
+    height: 100%; background: linear-gradient(90deg, #f59e0b, #f97316);
+    border-radius: 20px; transition: width 0.4s;
+  }
+  .plans-progress-text { text-align: center; font-size: 0.8rem; color: #64748b; margin-top: 5px; }
+
+  /* Plan item */
+  .plan-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+
+  .plan-item {
+    display: flex; align-items: center; gap: 12px;
+    background: #1e293b; border: 1px solid #334155; border-radius: 12px;
+    padding: 12px 14px; transition: border-color 0.15s;
+  }
+  .plan-item.done-plan { border-color: #1e3a5f; }
+  .plan-item.done-plan .plan-text { text-decoration: line-through; color: #475569; }
+  .plan-item.done-plan .plan-check { background: #f59e0b; border-color: #f59e0b; }
+  .plan-item.done-plan .plan-check::after { opacity: 1; }
+
+  .plan-check {
+    width: 22px; height: 22px; border-radius: 6px; border: 2px solid #475569;
+    flex-shrink: 0; cursor: pointer; position: relative; transition: all 0.2s;
+  }
+  .plan-check::after {
+    content: ''; position: absolute; top: 3px; left: 6px; width: 6px; height: 11px;
+    border: 2px solid #fff; border-top: none; border-left: none;
+    transform: rotate(45deg); opacity: 0; transition: opacity 0.2s;
+  }
+  .plan-text {
+    flex: 1; font-size: 0.95rem; cursor: pointer;
+    transition: color 0.2s; word-break: break-word;
+  }
+  .plan-tag {
+    font-size: 0.72rem; padding: 2px 8px; border-radius: 20px;
+    background: #451a03; color: #fbbf24; flex-shrink: 0;
+  }
+  .plan-del {
+    background: none; border: none; color: #475569; font-size: 1rem;
+    cursor: pointer; padding: 2px 6px; border-radius: 6px; transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .plan-del:hover { background: #3b1c1c; color: #f87171; }
+
+  /* Add plan form */
+  .add-plan-form {
+    display: flex; gap: 8px; margin-bottom: 14px;
+  }
+  .add-plan-input {
+    flex: 1; background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
+    border-radius: 10px; padding: 10px 14px; font-size: 0.92rem; outline: none;
+    transition: border-color 0.15s;
+  }
+  .add-plan-input:focus { border-color: #f59e0b; }
+  .add-plan-input::placeholder { color: #475569; }
+  .add-plan-btn {
+    background: #92400e; border: none; color: #fbbf24;
+    padding: 10px 18px; border-radius: 10px; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; transition: background 0.15s; white-space: nowrap;
+  }
+  .add-plan-btn:hover { background: #b45309; }
+
+  /* Category tabs */
+  .cat-tabs {
+    display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;
+  }
+  .cat-tab {
+    padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+    border: 1px solid #334155; background: transparent; color: #64748b;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .cat-tab.active { background: #92400e; border-color: #b45309; color: #fbbf24; }
+  .cat-tab:hover:not(.active) { border-color: #475569; color: #94a3b8; }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center; padding: 30px 20px; color: #475569; font-size: 0.9rem;
+  }
+
+  /* Year overview */
+  .year-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 24px;
+  }
+  .year-card {
+    background: #1e293b; border: 1px solid #334155; border-radius: 12px;
+    padding: 10px 12px; cursor: pointer; transition: all 0.15s;
+  }
+  .year-card:hover { border-color: #f59e0b; background: #1c1a10; }
+  .year-card.active-month { border-color: #f59e0b; background: #1c1a10; }
+  .yc-name { font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; }
+  .yc-bar-bg { background: #0f172a; border-radius: 10px; height: 4px; margin-bottom: 4px; overflow: hidden; }
+  .yc-bar { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #f59e0b, #f97316); }
+  .yc-count { font-size: 0.72rem; color: #64748b; }
+  .yc-count.yc-all { color: #34d399; }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <div class="day-nav">
-    <button class="nav-btn" id="prevBtn" onclick="changeDay(-1)">&#8592;</button>
-    <div class="day-info">
-      <div class="day-name" id="dayName"></div>
-      <div class="day-date" id="dayDate"></div>
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('daily')">☀️ Kun tartibim</button>
+    <button class="tab-btn" onclick="switchTab('monthly')">📅 Oylik rejalar</button>
+  </div>
+
+  <!-- ═══ KUN TARTIBI TAB ═══ -->
+  <div id="tab-daily" class="tab-panel active">
+
+    <div class="day-nav">
+      <button class="nav-btn" id="prevBtn" onclick="changeDay(-1)">&#8592;</button>
+      <div class="nav-info">
+        <div class="nav-main" id="dayName"></div>
+        <div class="nav-sub" id="dayDate"></div>
+      </div>
+      <button class="today-btn hidden" id="todayBtn" onclick="goToday()">Bugun</button>
+      <button class="nav-btn" id="nextBtn" onclick="changeDay(1)">&#8594;</button>
     </div>
-    <button class="today-btn hidden" id="todayBtn" onclick="goToday()">Bugun</button>
-    <button class="nav-btn" id="nextBtn" onclick="changeDay(1)">&#8594;</button>
-  </div>
 
-  <div class="progress-wrap">
-    <div class="progress-bar-bg"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
-    <div class="progress-text" id="progressText"></div>
-  </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-bg"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+      <div class="progress-text" id="progressText"></div>
+    </div>
 
-  <div class="monthly-alert" id="monthlyAlert">
-    🌍 Bu oyning 4-haftasi — o'zing uchun sayohat rejalashtirishni unutma!
-  </div>
+    <div class="monthly-alert" id="monthlyAlert">
+      🌍 Bu oyning 4-haftasi — o'zing uchun sayohat rejalashtirishni unutma!
+    </div>
 
-  <div id="schedule"></div>
+    <div id="schedule"></div>
 
-  <div class="monthly-section">
-    <div class="sec-head">🗓️ Oylik eslatma</div>
-    <div class="task-item" data-id="solo_trip" onclick="toggle('solo_trip')">
-      <div class="checkbox"></div>
-      <div class="task-main">
-        <span class="task-label">O'zing uchun sayohat</span>
-        <span class="task-duration">Oyning 4-haftasi</span>
+    <div class="monthly-section">
+      <div class="sec-head">🗓️ Oylik eslatma</div>
+      <div class="task-item" data-id="solo_trip" onclick="toggle('solo_trip')">
+        <div class="checkbox"></div>
+        <div class="task-main">
+          <span class="task-label">O'zing uchun sayohat</span>
+          <span class="task-duration">Oyning 4-haftasi</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <button class="reset-times" onclick="resetTimes()">↺ Soatlarni asl holatga qaytarish</button>
+    <button class="reset-times" onclick="resetTimes()">↺ Soatlarni asl holatga qaytarish</button>
 
-  <div class="history-title">📋 Oxirgi 14 kun tarixi</div>
-  <div class="history-grid" id="historyGrid"></div>
+    <div class="section-title">📋 Oxirgi 14 kun tarixi</div>
+    <div class="history-grid" id="historyGrid"></div>
+
+  </div><!-- /tab-daily -->
+
+  <!-- ═══ OYLIK REJALAR TAB ═══ -->
+  <div id="tab-monthly" class="tab-panel">
+
+    <!-- Oy navigatsiyasi -->
+    <div class="month-nav">
+      <button class="nav-btn" onclick="changeMonth(-1)">&#8592;</button>
+      <div class="month-nav-info">
+        <div class="month-nav-name" id="monthName"></div>
+        <div class="month-nav-year" id="monthYear"></div>
+      </div>
+      <button class="nav-btn" id="thisMonthBtn" onclick="goThisMonth()">Bu oy</button>
+      <button class="nav-btn" onclick="changeMonth(1)" id="nextMonthBtn">&#8594;</button>
+    </div>
+
+    <!-- Progress -->
+    <div class="plans-progress-wrap">
+      <div class="plans-progress-bg"><div class="plans-progress-bar" id="plansProgressBar" style="width:0%"></div></div>
+      <div class="plans-progress-text" id="plansProgressText"></div>
+    </div>
+
+    <!-- Kategoriya filtri -->
+    <div class="cat-tabs" id="catTabs"></div>
+
+    <!-- Yangi reja qo'shish -->
+    <div class="add-plan-form">
+      <input class="add-plan-input" id="planInput" placeholder="Yangi reja yozing..." maxlength="120"
+        onkeydown="if(event.key==='Enter') addPlan()">
+      <button class="add-plan-btn" onclick="addPlan()">+ Qo'shish</button>
+    </div>
+
+    <!-- Rejalar ro'yxati -->
+    <div class="plan-list" id="planList"></div>
+
+    <!-- Yil ko'rinishi -->
+    <div class="section-title">📆 Yillik ko'rinish</div>
+    <div class="year-grid" id="yearGrid"></div>
+
+  </div><!-- /tab-monthly -->
 
 </div>
 
 <script>
+/* ═══════════════════════════════════════════
+   UMUMIY
+═══════════════════════════════════════════ */
 const DAYS_UZ   = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
 const MONTHS_UZ = ['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentabr','Oktabr','Noyabr','Dekabr'];
 
+function pad(n) { return n < 10 ? '0'+n : ''+n; }
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', ['daily','monthly'][i]===name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if (name === 'monthly') renderMonthly();
+}
+
+/* ═══════════════════════════════════════════
+   KUN TARTIBI
+═══════════════════════════════════════════ */
 const DEFAULT_WEEKDAY = [
   { period: '🌙 Kecha', items: [
-    { id: 'sleep',        label: 'Uxlash',                 duration: '2 soat',       time: '22:00' }
-  ]},
+    { id:'sleep',        label:'Uxlash',                duration:'2 soat',       time:'22:00' }]},
   { period: '🌅 Ertalab', items: [
-    { id: 'fajr',         label: 'Bomdod + Badantarbiya',  duration: '30–40 daqiqa', time: '05:00' },
-    { id: 'quran_arabic', label: "Qur'on + Arab tili",     duration: '1 soat',       time: '05:45' },
-    { id: 'breakfast',    label: 'Nonushta',               duration: '20 daqiqa',    time: '07:00' },
-  ]},
+    { id:'fajr',         label:'Bomdod + Badantarbiya', duration:'30–40 daqiqa', time:'05:00' },
+    { id:'quran_arabic', label:"Qur'on + Arab tili",    duration:'1 soat',       time:'05:45' },
+    { id:'breakfast',    label:'Nonushta',              duration:'20 daqiqa',    time:'07:00' }]},
   { period: '☀️ Kun', items: [
-    { id: 'work',         label: 'Ish',                    duration: '8 soat',       time: '09:00' },
-  ]},
+    { id:'work',         label:'Ish',                   duration:'8 soat',       time:'09:00' }]},
   { period: '🌆 Kechqurun', items: [
-    { id: 'reading',      label: "Kitob o'qish (30 bet)",  duration: '45–60 daqiqa', time: '18:00' },
-    { id: 'kids',         label: 'Bolalarga vaqt',         duration: '1 soat',       time: '19:00' },
-  ]},
+    { id:'reading',      label:"Kitob o'qish (30 bet)", duration:'45–60 daqiqa', time:'18:00' },
+    { id:'kids',         label:'Bolalarga vaqt',        duration:'1 soat',       time:'19:00' }]},
 ];
 
 const DEFAULT_WEEKEND = [
   { period: '🌙 Kecha', items: [
-    { id: 'sleep',        label: 'Uxlash',                 duration: '2 soat',       time: '22:00' }
-  ]},
+    { id:'sleep',        label:'Uxlash',                duration:'2 soat',       time:'22:00' }]},
   { period: '🌅 Ertalab', items: [
-    { id: 'fajr',         label: 'Bomdod + Badantarbiya',  duration: '30–40 daqiqa', time: '05:00' },
-    { id: 'quran_juz',    label: "Kamida 1 pora Qur'on",   duration: '1 soat',       time: '05:45' },
-    { id: 'lecture',      label: 'Maruza eshitish',        duration: '1 soat',       time: '07:00' },
-    { id: 'breakfast',    label: 'Nonushta',               duration: '20 daqiqa',    time: '08:00' },
-  ]},
+    { id:'fajr',         label:'Bomdod + Badantarbiya', duration:'30–40 daqiqa', time:'05:00' },
+    { id:'quran_juz',    label:"Kamida 1 pora Qur'on",  duration:'1 soat',       time:'05:45' },
+    { id:'lecture',      label:'Maruza eshitish',       duration:'1 soat',       time:'07:00' },
+    { id:'breakfast',    label:'Nonushta',              duration:'20 daqiqa',    time:'08:00' }]},
   { period: '☀️ Kun', items: [
-    { id: 'plan',         label: 'Ishlarni rejalashtirish', duration: '1 soat',      time: '09:00' },
-    { id: 'family_trip',  label: 'Oilaviy sayohat',        duration: '3–4 soat',     time: '10:00' },
-  ]},
+    { id:'plan',         label:'Ishlarni rejalashtirish',duration:'1 soat',      time:'09:00' },
+    { id:'family_trip',  label:'Oilaviy sayohat',        duration:'3–4 soat',    time:'10:00' }]},
   { period: '🌆 Kechqurun', items: [
-    { id: 'reading_50',   label: "Kitob o'qish (50 bet)",  duration: '1.5 soat',     time: '15:00' },
-    { id: 'charity',      label: 'Ehson + Qarindoshlar',   duration: '1–2 soat',     time: '16:30' },
-  ]},
+    { id:'reading_50',   label:"Kitob o'qish (50 bet)", duration:'1.5 soat',     time:'15:00' },
+    { id:'charity',      label:'Ehson + Qarindoshlar',  duration:'1–2 soat',     time:'16:30' }]},
 ];
 
-function allIds(schedule) {
-  return schedule.flatMap(g => g.items.map(i => i.id)).concat(['solo_trip']);
-}
-
+function allIds(s){ return s.flatMap(g=>g.items.map(i=>i.id)).concat(['solo_trip']); }
 const WEEKDAY_IDS = allIds(DEFAULT_WEEKDAY);
 const WEEKEND_IDS = allIds(DEFAULT_WEEKEND);
 
 let selectedDate = dateKey(new Date());
 
-/* ── helpers ── */
-function dateKey(d) { return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
-function pad(n)     { return n < 10 ? '0'+n : ''+n; }
-function parseDate(k){ const [y,m,d]=k.split('-').map(Number); return new Date(y,m-1,d); }
+function dateKey(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function parseDate(k){ const[y,m,d]=k.split('-').map(Number); return new Date(y,m-1,d); }
 function isWeekend(d){ return d.getDay()===0||d.getDay()===6; }
-function isWeek4(d)  { return d.getDate()>=22&&d.getDate()<=28; }
+function isWeek4(d){ return d.getDate()>=22&&d.getDate()<=28; }
 
-/* ── tasks storage ── */
-function loadDone(k)    { const r=localStorage.getItem('tasks_'+k); return r?JSON.parse(r):[]; }
-function saveDone(k,arr){ localStorage.setItem('tasks_'+k,JSON.stringify(arr)); }
-function taskIds(k)     { return isWeekend(parseDate(k))?WEEKEND_IDS:WEEKDAY_IDS; }
+function loadDone(k){ const r=localStorage.getItem('tasks_'+k); return r?JSON.parse(r):[]; }
+function saveDone(k,a){ localStorage.setItem('tasks_'+k,JSON.stringify(a)); }
+function taskIds(k){ return isWeekend(parseDate(k))?WEEKEND_IDS:WEEKDAY_IDS; }
 
-/* ── custom times storage ── */
-function loadTimes() {
-  const r = localStorage.getItem('custom_times');
-  return r ? JSON.parse(r) : {};
-}
-function saveTime(id, val) {
-  const t = loadTimes(); t[id] = val;
-  localStorage.setItem('custom_times', JSON.stringify(t));
-}
-function resetTimes() {
-  if (confirm("Barcha soatlar asl holatiga qaytarilsinmi?")) {
-    localStorage.removeItem('custom_times');
-    render();
-  }
-}
-function getTime(id, defaultTime) {
-  const t = loadTimes();
-  return t[id] || defaultTime;
-}
+function loadTimes(){ const r=localStorage.getItem('custom_times'); return r?JSON.parse(r):{}; }
+function saveTime(id,v){ const t=loadTimes(); t[id]=v; localStorage.setItem('custom_times',JSON.stringify(t)); }
+function resetTimes(){ if(confirm("Barcha soatlar asl holatiga qaytarilsinmi?")){ localStorage.removeItem('custom_times'); renderDaily(); } }
 
-/* ── build schedule DOM ── */
-function buildSchedule(schedule, done) {
+function buildSchedule(schedule, done){
   const container = document.getElementById('schedule');
   container.innerHTML = '';
-  const customTimes = loadTimes();
-
+  const ct = loadTimes();
   schedule.forEach(group => {
-    const header = document.createElement('div');
-    header.className = 'period-header';
-    header.textContent = group.period;
-    container.appendChild(header);
-
-    const timeline = document.createElement('div');
-    timeline.className = 'timeline';
-
+    const h = document.createElement('div');
+    h.className = 'period-header'; h.textContent = group.period;
+    container.appendChild(h);
+    const tl = document.createElement('div'); tl.className = 'timeline';
     group.items.forEach(item => {
-      const currentTime = customTimes[item.id] || item.time;
-      const isEdited    = !!customTimes[item.id];
-
-      const wrap = document.createElement('div');
-      wrap.className = 'time-group';
-
-      // dot
-      const dot = document.createElement('div');
-      dot.className = 'time-dot';
-
-      // time label (click to edit)
-      const label = document.createElement('div');
-      label.className = 'time-label' + (isEdited ? ' edited' : '');
-      label.textContent = currentTime;
-      label.title = 'Soatni o\'zgartirish uchun bosing';
-      label.addEventListener('click', function(e) {
-        e.stopPropagation();
-        openTimeEditor(label, item.id, currentTime);
-      });
-
-      // task card
+      const curTime = ct[item.id]||item.time;
+      const wrap = document.createElement('div'); wrap.className = 'time-group';
+      const dot = document.createElement('div'); dot.className = 'time-dot';
+      const lbl = document.createElement('div');
+      lbl.className = 'time-label'+(ct[item.id]?' edited':'');
+      lbl.textContent = curTime;
+      lbl.title = "Soatni o'zgartirish";
+      lbl.addEventListener('click', e => { e.stopPropagation(); openTimeEditor(lbl,item.id,curTime); });
       const card = document.createElement('div');
-      card.className = 'task-item' + (done.includes(item.id) ? ' done' : '');
+      card.className = 'task-item'+(done.includes(item.id)?' done':'');
       card.dataset.id = item.id;
-      card.innerHTML =
-        '<div class="checkbox"></div>' +
-        '<div class="task-main">' +
-          '<span class="task-label">' + item.label + '</span>' +
-          '<span class="task-duration">' + item.duration + '</span>' +
-        '</div>';
-      card.addEventListener('click', function() { toggle(item.id); });
-
-      wrap.appendChild(label);
-      wrap.appendChild(dot);
-      wrap.appendChild(card);
-      timeline.appendChild(wrap);
+      card.innerHTML = '<div class="checkbox"></div><div class="task-main"><span class="task-label">'+item.label+'</span><span class="task-duration">'+item.duration+'</span></div>';
+      card.addEventListener('click', ()=>toggle(item.id));
+      wrap.appendChild(lbl); wrap.appendChild(dot); wrap.appendChild(card);
+      tl.appendChild(wrap);
     });
-
-    container.appendChild(timeline);
+    container.appendChild(tl);
   });
 }
 
-/* ── inline time editor ── */
-function openTimeEditor(labelEl, id, currentTime) {
-  // agar allaqachon input ochiq bo'lsa — yopamiz
-  const existing = labelEl.parentNode.querySelector('.time-input');
-  if (existing) { existing.remove(); labelEl.style.visibility = 'visible'; return; }
-
-  labelEl.style.visibility = 'hidden';
-
-  const input = document.createElement('input');
-  input.type  = 'time';
-  input.value = currentTime;
-  input.className = 'time-input';
-
-  function confirm() {
-    const val = input.value;
-    if (val) {
-      saveTime(id, val);
-    }
-    input.remove();
-    render();
-  }
-
-  input.addEventListener('change', confirm);
-  input.addEventListener('blur',   confirm);
-  input.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') confirm();
-    if (e.key === 'Escape') { input.remove(); labelEl.style.visibility = 'visible'; }
-  });
-
-  labelEl.parentNode.insertBefore(input, labelEl);
-  input.focus();
+function openTimeEditor(lbl, id, cur){
+  const ex = lbl.parentNode.querySelector('.time-input');
+  if(ex){ ex.remove(); lbl.style.visibility='visible'; return; }
+  lbl.style.visibility='hidden';
+  const inp = document.createElement('input');
+  inp.type='time'; inp.value=cur; inp.className='time-input';
+  function confirm(){ if(inp.value) saveTime(id,inp.value); inp.remove(); renderDaily(); }
+  inp.addEventListener('change', confirm);
+  inp.addEventListener('blur', confirm);
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter') confirm(); if(e.key==='Escape'){ inp.remove(); lbl.style.visibility='visible'; } });
+  lbl.parentNode.insertBefore(inp, lbl); inp.focus();
 }
 
-/* ── main render ── */
-function render() {
-  const d       = parseDate(selectedDate);
-  const done    = loadDone(selectedDate);
-  const today   = dateKey(new Date());
-  const weekend = isWeekend(d);
-
+function renderDaily(){
+  const d=parseDate(selectedDate), done=loadDone(selectedDate);
+  const today=dateKey(new Date()), weekend=isWeekend(d);
   document.getElementById('dayName').textContent = DAYS_UZ[d.getDay()];
-  document.getElementById('dayDate').textContent =
-    d.getDate() + ' ' + MONTHS_UZ[d.getMonth()] + ' ' + d.getFullYear();
-
-  document.getElementById('todayBtn').classList.toggle('hidden', selectedDate === today);
-  document.getElementById('nextBtn').disabled = selectedDate >= today;
-  document.getElementById('monthlyAlert').style.display = isWeek4(d) ? 'block' : 'none';
-
-  buildSchedule(weekend ? DEFAULT_WEEKEND : DEFAULT_WEEKDAY, done);
-
-  const soloEl = document.querySelector('[data-id="solo_trip"]');
-  if (soloEl) soloEl.classList.toggle('done', done.includes('solo_trip'));
-
-  const ids   = taskIds(selectedDate);
-  const count = ids.filter(id => done.includes(id)).length;
-  const pct   = ids.length ? Math.round(count / ids.length * 100) : 0;
-  document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('progressText').textContent =
-    count + ' / ' + ids.length + ' vazifa bajarildi (' + pct + '%)';
-
+  document.getElementById('dayDate').textContent = d.getDate()+' '+MONTHS_UZ[d.getMonth()]+' '+d.getFullYear();
+  document.getElementById('todayBtn').classList.toggle('hidden', selectedDate===today);
+  document.getElementById('nextBtn').disabled = selectedDate>=today;
+  document.getElementById('monthlyAlert').style.display = isWeek4(d)?'block':'none';
+  buildSchedule(weekend?DEFAULT_WEEKEND:DEFAULT_WEEKDAY, done);
+  const soloEl=document.querySelector('#tab-daily [data-id="solo_trip"]');
+  if(soloEl) soloEl.classList.toggle('done', done.includes('solo_trip'));
+  const ids=taskIds(selectedDate), count=ids.filter(id=>done.includes(id)).length;
+  const pct=ids.length?Math.round(count/ids.length*100):0;
+  document.getElementById('progressBar').style.width=pct+'%';
+  document.getElementById('progressText').textContent=count+' / '+ids.length+' vazifa bajarildi ('+pct+'%)';
   renderHistory();
 }
 
-function renderHistory() {
-  const grid  = document.getElementById('historyGrid');
-  const today = dateKey(new Date());
-  grid.innerHTML = '';
-  for (let i = 13; i >= 0; i--) {
-    const d   = new Date(); d.setDate(d.getDate() - i);
-    const key = dateKey(d);
-    const done = loadDone(key);
-    const ids  = taskIds(key);
-    const count = ids.filter(id => done.includes(id)).length;
-    const pct   = ids.length ? Math.round(count / ids.length * 100) : 0;
-    const card  = document.createElement('div');
-    card.className = 'history-card' +
-      (key === selectedDate ? ' active' : '') + (key === today ? ' today-card' : '');
-    card.innerHTML =
-      '<div class="hc-day">' + DAYS_UZ[d.getDay()] + (key===today?' • Bugun':'') + '</div>' +
-      '<div class="hc-date">' + d.getDate() + ' ' + MONTHS_UZ[d.getMonth()] + '</div>' +
-      '<div class="hc-bar-bg"><div class="hc-bar" style="width:'+pct+'%"></div></div>' +
+function renderHistory(){
+  const grid=document.getElementById('historyGrid'), today=dateKey(new Date());
+  grid.innerHTML='';
+  for(let i=13;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const key=dateKey(d), done=loadDone(key), ids=taskIds(key);
+    const count=ids.filter(id=>done.includes(id)).length;
+    const pct=ids.length?Math.round(count/ids.length*100):0;
+    const card=document.createElement('div');
+    card.className='history-card'+(key===selectedDate?' active':'')+(key===today?' today-card':'');
+    card.innerHTML='<div class="hc-day">'+DAYS_UZ[d.getDay()]+(key===today?' • Bugun':'')+'</div>'+
+      '<div class="hc-date">'+d.getDate()+' '+MONTHS_UZ[d.getMonth()]+'</div>'+
+      '<div class="hc-bar-bg"><div class="hc-bar" style="width:'+pct+'%"></div></div>'+
       '<div class="hc-pct'+(pct===100?' done-all':'')+'">'+count+'/'+ids.length+' — '+pct+'%</div>';
-    card.addEventListener('click', function() { selectedDate = key; render(); });
+    card.addEventListener('click',()=>{ selectedDate=key; renderDaily(); });
     grid.appendChild(card);
   }
 }
 
-function toggle(id) {
-  const done = loadDone(selectedDate);
-  const idx  = done.indexOf(id);
-  if (idx >= 0) done.splice(idx,1); else done.push(id);
-  saveDone(selectedDate, done);
-  render();
+function toggle(id){
+  const done=loadDone(selectedDate), idx=done.indexOf(id);
+  if(idx>=0) done.splice(idx,1); else done.push(id);
+  saveDone(selectedDate,done); renderDaily();
+}
+function changeDay(dir){
+  const d=parseDate(selectedDate); d.setDate(d.getDate()+dir);
+  if(dateKey(d)>dateKey(new Date())) return;
+  selectedDate=dateKey(d); renderDaily();
+}
+function goToday(){ selectedDate=dateKey(new Date()); renderDaily(); }
+
+/* ═══════════════════════════════════════════
+   OYLIK REJALAR
+═══════════════════════════════════════════ */
+const CATEGORIES = [
+  { id:'all',     label:'Hammasi' },
+  { id:'travel',  label:'✈️ Sayohat' },
+  { id:'family',  label:'👨‍👩‍👧 Oila' },
+  { id:'work',    label:'💼 Ish' },
+  { id:'self',    label:'📚 O\'zim' },
+  { id:'other',   label:'📌 Boshqa' },
+];
+
+let selectedMonthKey = monthKey(new Date());
+let selectedCat = 'all';
+
+function monthKey(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1); }
+function parseMonth(k){ const[y,m]=k.split('-').map(Number); return new Date(y,m-1,1); }
+
+function loadPlans(mk){ const r=localStorage.getItem('plans_'+mk); return r?JSON.parse(r):[]; }
+function savePlans(mk,arr){ localStorage.setItem('plans_'+mk,JSON.stringify(arr)); }
+
+function addPlan(){
+  const inp=document.getElementById('planInput');
+  const text=inp.value.trim(); if(!text) return;
+  const plans=loadPlans(selectedMonthKey);
+  const cat = selectedCat==='all'?'other':selectedCat;
+  plans.push({ id: Date.now()+'', text, cat, done:false });
+  savePlans(selectedMonthKey,plans);
+  inp.value=''; renderMonthly();
 }
 
-function changeDay(dir) {
-  const d = parseDate(selectedDate); d.setDate(d.getDate()+dir);
-  if (dateKey(d) > dateKey(new Date())) return;
-  selectedDate = dateKey(d); render();
+function togglePlan(id){
+  const plans=loadPlans(selectedMonthKey);
+  const p=plans.find(p=>p.id===id); if(p) p.done=!p.done;
+  savePlans(selectedMonthKey,plans); renderMonthly();
 }
 
-function goToday() { selectedDate = dateKey(new Date()); render(); }
+function deletePlan(id){
+  const plans=loadPlans(selectedMonthKey).filter(p=>p.id!==id);
+  savePlans(selectedMonthKey,plans); renderMonthly();
+}
 
-render();
+function renderMonthly(){
+  const d=parseMonth(selectedMonthKey);
+  const now=new Date(), thisMk=monthKey(now);
+  document.getElementById('monthName').textContent = MONTHS_UZ[d.getMonth()];
+  document.getElementById('monthYear').textContent = d.getFullYear()+' yil';
+
+  // next month btn — faqat bir oy oldinga ruxsat
+  const nextD=new Date(d); nextD.setMonth(nextD.getMonth()+1);
+  document.getElementById('nextMonthBtn').disabled = monthKey(nextD) > monthKey(new Date(nextD.getFullYear(), nextD.getMonth()+2, 0));
+
+  // bu oy btn
+  const thisBtn=document.getElementById('thisMonthBtn');
+  thisBtn.style.visibility = selectedMonthKey===thisMk?'hidden':'visible';
+
+  // category tabs
+  const catEl=document.getElementById('catTabs');
+  catEl.innerHTML='';
+  CATEGORIES.forEach(c=>{
+    const btn=document.createElement('button');
+    btn.className='cat-tab'+(selectedCat===c.id?' active':'');
+    btn.textContent=c.label;
+    btn.addEventListener('click',()=>{ selectedCat=c.id; renderMonthly(); });
+    catEl.appendChild(btn);
+  });
+
+  // plans
+  const allPlans=loadPlans(selectedMonthKey);
+  const filtered=selectedCat==='all'?allPlans:allPlans.filter(p=>p.cat===selectedCat);
+  const list=document.getElementById('planList');
+  list.innerHTML='';
+
+  if(filtered.length===0){
+    const em=document.createElement('div'); em.className='empty-state';
+    em.textContent=selectedCat==='all'?"Hali reja yo'q. Yuqoridagi maydonga yozing!":"Bu kategoriyada reja yo'q.";
+    list.appendChild(em);
+  } else {
+    filtered.forEach(p=>{
+      const catLabel=CATEGORIES.find(c=>c.id===p.cat)||CATEGORIES[5];
+      const el=document.createElement('div');
+      el.className='plan-item'+(p.done?' done-plan':'');
+      el.innerHTML=
+        '<div class="plan-check"></div>'+
+        '<span class="plan-text">'+escHtml(p.text)+'</span>'+
+        '<span class="plan-tag">'+catLabel.label+'</span>'+
+        '<button class="plan-del" title="O\'chirish">✕</button>';
+      el.querySelector('.plan-check').addEventListener('click', ()=>togglePlan(p.id));
+      el.querySelector('.plan-text').addEventListener('click',  ()=>togglePlan(p.id));
+      el.querySelector('.plan-del').addEventListener('click',   ()=>{ if(confirm("O'chirilsinmi?")) deletePlan(p.id); });
+      list.appendChild(el);
+    });
+  }
+
+  // progress
+  const total=allPlans.length, done=allPlans.filter(p=>p.done).length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('plansProgressBar').style.width=pct+'%';
+  document.getElementById('plansProgressText').textContent=
+    total?done+' / '+total+' reja bajarildi ('+pct+'%)':"Bu oyda hali reja yo'q";
+
+  renderYearGrid();
+}
+
+function renderYearGrid(){
+  const grid=document.getElementById('yearGrid');
+  grid.innerHTML='';
+  const year=parseMonth(selectedMonthKey).getFullYear();
+  for(let m=0;m<12;m++){
+    const mk=year+'-'+pad(m+1);
+    const plans=loadPlans(mk);
+    const total=plans.length, done=plans.filter(p=>p.done).length;
+    const pct=total?Math.round(done/total*100):0;
+    const card=document.createElement('div');
+    card.className='year-card'+(mk===selectedMonthKey?' active-month':'');
+    card.innerHTML=
+      '<div class="yc-name">'+MONTHS_UZ[m]+'</div>'+
+      '<div class="yc-bar-bg"><div class="yc-bar" style="width:'+pct+'%"></div></div>'+
+      '<div class="yc-count'+(pct===100&&total>0?' yc-all':'')+'">'+
+        (total?done+'/'+total+' reja':'-')+
+      '</div>';
+    card.addEventListener('click',()=>{ selectedMonthKey=mk; renderMonthly(); });
+    grid.appendChild(card);
+  }
+}
+
+function changeMonth(dir){
+  const d=parseMonth(selectedMonthKey); d.setMonth(d.getMonth()+dir);
+  selectedMonthKey=monthKey(d); renderMonthly();
+}
+function goThisMonth(){ selectedMonthKey=monthKey(new Date()); renderMonthly(); }
+
+function escHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ═══ INIT ═══ */
+renderDaily();
 </script>
 </body>
 </html>
