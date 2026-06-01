@@ -85,6 +85,7 @@
   .edit-toggle.on { background: #1d4ed8; color: #fff; }
   .reset-schedule { background: none; border: 1px solid var(--border); color: var(--text3); padding: 7px 14px; border-radius: 8px; font-size: 0.82rem; cursor: pointer; transition: all 0.15s; margin-left: auto; }
   .reset-schedule:hover { border-color: var(--border2); color: var(--text2); }
+  .edit-day-info { display: none; font-size: 0.78rem; color: #fbbf24; background: #451a03; padding: 4px 10px; border-radius: 6px; }
 
   /* PERIOD HEADER */
   .period-header { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text2); margin: 16px 0 8px; display: flex; align-items: center; gap: 8px; }
@@ -331,6 +332,7 @@
     <!-- Edit toolbar -->
     <div class="edit-toolbar">
       <button class="edit-toggle" id="editToggle" onclick="toggleEditMode()">✏️ Jadvalni tahrirlash</button>
+      <span class="edit-day-info" id="editDayInfo"></span>
     </div>
 
     <div id="scheduleWrap">
@@ -439,14 +441,39 @@ const DEFAULT_SCHEDULE = [
     { id:'selfdev',  label:'Shaxsiy rivojlanish',       duration:'30 daqiqa',    time:'21:00' }]},
 ];
 
-function getSchedule(){
-  const r = localStorage.getItem('custom_schedule');
-  return r ? JSON.parse(r) : JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
-}
-function saveSchedule(data){
-  localStorage.setItem('custom_schedule', JSON.stringify(data));
-}
 function getAllIds(schedule){ return schedule.flatMap(g=>g.items.map(i=>i.id)); }
+
+/* ── versiyalash: har kun-haftasi uchun alohida jadval, tarix saqlanadi ── */
+function getVersions(){
+  const r=localStorage.getItem('schedule_versions');
+  if(!r){
+    /* eski custom_schedule / custom_times dan ko'chirish */
+    const old=localStorage.getItem('custom_schedule');
+    const oldT=localStorage.getItem('custom_times');
+    const base=old?JSON.parse(old):JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
+    if(oldT){ const t=JSON.parse(oldT); base.forEach(g=>g.items.forEach(item=>{ if(t[item.id]) item.time=t[item.id]; })); }
+    const s={}; for(let d=0;d<7;d++) s[d]=JSON.parse(JSON.stringify(base));
+    const init=[{from:'2000-01-01',s}];
+    localStorage.setItem('schedule_versions',JSON.stringify(init));
+    return init;
+  }
+  return JSON.parse(r);
+}
+function saveVersions(v){ localStorage.setItem('schedule_versions',JSON.stringify(v)); }
+
+function getScheduleForDate(dKey){
+  const versions=getVersions(), dow=parseDate(dKey).getDay();
+  let found=versions[0];
+  for(const v of versions){ if(v.from<=dKey) found=v; else break; }
+  return JSON.parse(JSON.stringify(found.s[dow]));
+}
+
+function saveScheduleChange(dow,schedule){
+  const versions=getVersions(), today=dateKey(new Date()), last=versions[versions.length-1];
+  if(last.from===today){ last.s[dow]=schedule; }
+  else { const nv={from:today,s:JSON.parse(JSON.stringify(last.s))}; nv.s[dow]=schedule; versions.push(nv); }
+  saveVersions(versions);
+}
 
 let selectedDate = dateKey(new Date());
 let editMode = false;
@@ -456,9 +483,6 @@ function parseDate(k){ const[y,m,d]=k.split('-').map(Number); return new Date(y,
 function isWeek4(d){ return d.getDate()>=22&&d.getDate()<=28; }
 function loadDone(k){ const r=localStorage.getItem('tasks_'+k); return r?JSON.parse(r):[]; }
 function saveDone(k,a){ localStorage.setItem('tasks_'+k,JSON.stringify(a)); }
-function loadTimes(){ const r=localStorage.getItem('custom_times'); return r?JSON.parse(r):{}; }
-function saveTime(id,v){ const t=loadTimes(); t[id]=v; localStorage.setItem('custom_times',JSON.stringify(t)); }
-function resetTimes(){ if(confirm("Barcha soatlar asl holatiga qaytarilsinmi?")){ localStorage.removeItem('custom_times'); renderDaily(); } }
 
 function toggleEditMode(){
   editMode = !editMode;
@@ -469,16 +493,13 @@ function toggleEditMode(){
 }
 
 /* ── jadval qurish ── */
-function buildSchedule(schedule, done){
+function buildSchedule(schedule, done, dow){
   const container = document.getElementById('schedule');
   container.innerHTML = '';
   if(editMode) container.classList.add('edit-mode');
   else container.classList.remove('edit-mode');
 
-  const ct = loadTimes();
-
   schedule.forEach((group, gIdx) => {
-    /* Period header */
     const header = document.createElement('div');
     header.className = 'period-header';
     if(editMode){
@@ -487,12 +508,12 @@ function buildSchedule(schedule, done){
       nameInp.value = group.period;
       nameInp.addEventListener('change', ()=>{
         schedule[gIdx].period = nameInp.value;
-        saveSchedule(schedule);
+        saveScheduleChange(dow, schedule);
       });
       const delBtn = document.createElement('button');
-      delBtn.className = 'del-period-btn'; delBtn.textContent = '✕ Bo\'limni o\'chirish';
+      delBtn.className = 'del-period-btn'; delBtn.textContent = "✕ Bo'limni o'chirish";
       delBtn.addEventListener('click', ()=>{
-        if(confirm("Bu bo'lim o'chirilsinmi?")){ schedule.splice(gIdx,1); saveSchedule(schedule); renderDaily(); }
+        if(confirm("Bu bo'lim o'chirilsinmi?")){ schedule.splice(gIdx,1); saveScheduleChange(dow,schedule); renderDaily(); }
       });
       header.appendChild(nameInp); header.appendChild(delBtn);
     } else {
@@ -500,30 +521,25 @@ function buildSchedule(schedule, done){
     }
     container.appendChild(header);
 
-    /* Tasks */
     const tl = document.createElement('div'); tl.className = 'timeline';
 
     group.items.forEach((item, iIdx) => {
-      const curTime = ct[item.id]||item.time;
       const wrap = document.createElement('div'); wrap.className = 'time-group';
       const dot  = document.createElement('div'); dot.className = 'time-dot';
 
-      /* Time label */
       const lbl = document.createElement('div');
-      lbl.className = 'time-label'+(ct[item.id]?' edited':'');
-      lbl.textContent = curTime;
+      lbl.className = 'time-label';
+      lbl.textContent = item.time;
       if(!editMode){
         lbl.title = "Soatni o'zgartirish";
-        lbl.addEventListener('click', e=>{ e.stopPropagation(); openTimeEditor(lbl,item.id,curTime); });
+        lbl.addEventListener('click', e=>{ e.stopPropagation(); openTimeEditor(lbl, item, schedule, dow); });
       }
 
-      /* Card */
       const card = document.createElement('div');
       card.className = 'task-item'+(done.includes(item.id)?' done':'');
       card.dataset.id = item.id;
 
       if(editMode){
-        /* Edit mode: show inline editor */
         card.innerHTML =
           '<div class="task-main">'+
             '<span class="task-label">'+escHtml(item.label)+'</span>'+
@@ -533,12 +549,11 @@ function buildSchedule(schedule, done){
             '<button class="task-edit-btn" title="Tahrirlash">✏️</button>'+
             '<button class="task-del-btn" title="O\'chirish">✕</button>'+
           '</div>';
-
         card.querySelector('.task-edit-btn').addEventListener('click', ()=>{
-          openInlineEdit(card, item, gIdx, iIdx, schedule);
+          openInlineEdit(card, item, gIdx, iIdx, schedule, dow);
         });
         card.querySelector('.task-del-btn').addEventListener('click', ()=>{
-          if(confirm("Vazifa o'chirilsinmi?")){ group.items.splice(iIdx,1); saveSchedule(schedule); renderDaily(); }
+          if(confirm("Vazifa o'chirilsinmi?")){ group.items.splice(iIdx,1); saveScheduleChange(dow,schedule); renderDaily(); }
         });
       } else {
         card.innerHTML =
@@ -556,94 +571,91 @@ function buildSchedule(schedule, done){
 
     container.appendChild(tl);
 
-    /* Add task button (edit mode only) */
     if(editMode){
       const addRow = document.createElement('div'); addRow.className = 'add-task-row';
       const addBtn = document.createElement('button'); addBtn.className = 'add-task-btn';
-      addBtn.textContent = '+ Vazifa qo\'shish';
-      addBtn.addEventListener('click', ()=>{ addBtn.style.display='none'; showAddTaskForm(addRow, gIdx, schedule, addBtn); });
+      addBtn.textContent = "+ Vazifa qo'shish";
+      addBtn.addEventListener('click', ()=>{ addBtn.style.display='none'; showAddTaskForm(addRow, gIdx, schedule, dow, addBtn); });
       addRow.appendChild(addBtn); container.appendChild(addRow);
     }
   });
 }
 
-function openInlineEdit(card, item, gIdx, iIdx, schedule){
-  /* already editing? */
+function openInlineEdit(card, item, gIdx, iIdx, schedule, dow){
   if(card.querySelector('.inline-edit')) return;
   const main = card.querySelector('.task-main');
   main.style.display='none';
-
   const form = document.createElement('div'); form.className='inline-edit';
   const labelInp = document.createElement('input'); labelInp.value=item.label; labelInp.placeholder='Vazifa nomi';
   const durInp   = document.createElement('input'); durInp.value=item.duration; durInp.placeholder='Davomiyligi (masalan: 1 soat)';
   const actions  = document.createElement('div'); actions.className='inline-edit-actions';
   const saveBtn  = document.createElement('button'); saveBtn.className='ie-save'; saveBtn.textContent='Saqlash';
   const cancelBtn= document.createElement('button'); cancelBtn.className='ie-cancel'; cancelBtn.textContent='Bekor';
-
   saveBtn.addEventListener('click', ()=>{
     item.label    = labelInp.value.trim()||item.label;
     item.duration = durInp.value.trim()||item.duration;
     schedule[gIdx].items[iIdx] = item;
-    saveSchedule(schedule); renderDaily();
+    saveScheduleChange(dow, schedule); renderDaily();
   });
   cancelBtn.addEventListener('click', ()=>{ form.remove(); main.style.display=''; });
-
   actions.appendChild(saveBtn); actions.appendChild(cancelBtn);
   form.appendChild(labelInp); form.appendChild(durInp); form.appendChild(actions);
   card.insertBefore(form, card.querySelector('.task-edit-controls'));
   labelInp.focus(); labelInp.select();
 }
 
-function showAddTaskForm(container, gIdx, schedule, addBtn){
+function showAddTaskForm(container, gIdx, schedule, dow, addBtn){
   const form = document.createElement('div'); form.className='add-task-form';
   const labelInp = document.createElement('input'); labelInp.placeholder='Vazifa nomi'; labelInp.style.marginTop='6px';
   const durInp   = document.createElement('input'); durInp.placeholder='Davomiyligi (masalan: 30 daqiqa)';
   const row = document.createElement('div'); row.className='add-task-form-row';
-  const saveBtn = document.createElement('button'); saveBtn.className='atf-save'; saveBtn.textContent='Qo\'shish';
+  const saveBtn = document.createElement('button'); saveBtn.className='atf-save'; saveBtn.textContent="Qo'shish";
   const cancelBtn=document.createElement('button'); cancelBtn.className='atf-cancel'; cancelBtn.textContent='Bekor';
-
   saveBtn.addEventListener('click', ()=>{
     const label = labelInp.value.trim(); if(!label) return;
     const newItem = { id:'task_'+Date.now(), label, duration: durInp.value.trim()||'—', time:'09:00' };
     schedule[gIdx].items.push(newItem);
-    saveSchedule(schedule); renderDaily();
+    saveScheduleChange(dow, schedule); renderDaily();
   });
   cancelBtn.addEventListener('click', ()=>{ form.remove(); addBtn.style.display=''; });
-
   row.appendChild(saveBtn); row.appendChild(cancelBtn);
   form.appendChild(labelInp); form.appendChild(durInp); form.appendChild(row);
   container.appendChild(form); labelInp.focus();
 }
 
 function addPeriod(){
-  const schedule = getSchedule();
-  schedule.push({ period:'🕐 Yangi bo\'lim', items:[] });
-  saveSchedule(schedule); renderDaily();
+  const dow = parseDate(selectedDate).getDay();
+  const schedule = getScheduleForDate(selectedDate);
+  schedule.push({ period:"🕐 Yangi bo'lim", items:[] });
+  saveScheduleChange(dow, schedule); renderDaily();
 }
 
-function openTimeEditor(lbl, id, cur){
-  const ex=lbl.parentNode.querySelector('.time-input');
+function openTimeEditor(lbl, item, schedule, dow){
+  const ex = lbl.parentNode.querySelector('.time-input');
   if(ex){ ex.remove(); lbl.style.visibility='visible'; return; }
-  lbl.style.visibility='hidden';
-  const inp=document.createElement('input'); inp.type='time'; inp.value=cur; inp.className='time-input';
-  function confirm(){ if(inp.value) saveTime(id,inp.value); inp.remove(); renderDaily(); }
-  inp.addEventListener('change',confirm); inp.addEventListener('blur',confirm);
-  inp.addEventListener('keydown',e=>{ if(e.key==='Enter') confirm(); if(e.key==='Escape'){ inp.remove(); lbl.style.visibility='visible'; } });
-  lbl.parentNode.insertBefore(inp,lbl); inp.focus();
+  lbl.style.visibility = 'hidden';
+  const inp=document.createElement('input'); inp.type='time'; inp.value=item.time; inp.className='time-input';
+  function save(){ if(inp.value){ item.time=inp.value; saveScheduleChange(dow,schedule); } inp.remove(); renderDaily(); }
+  inp.addEventListener('change', save); inp.addEventListener('blur', save);
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter') save(); if(e.key==='Escape'){ inp.remove(); lbl.style.visibility='visible'; } });
+  lbl.parentNode.insertBefore(inp, lbl); inp.focus();
 }
 
 function renderDaily(){
   const d=parseDate(selectedDate), done=loadDone(selectedDate);
-  const today=dateKey(new Date());
-  const schedule=getSchedule();
+  const today=dateKey(new Date()), dow=d.getDay();
+  const schedule=getScheduleForDate(selectedDate);
 
-  document.getElementById('dayName').textContent = DAYS_UZ[d.getDay()];
+  document.getElementById('dayName').textContent = DAYS_UZ[dow];
   document.getElementById('dayDate').textContent = d.getDate()+' '+MONTHS_UZ[d.getMonth()]+' '+d.getFullYear();
   document.getElementById('todayBtn').classList.toggle('hidden', selectedDate===today);
   document.getElementById('nextBtn').disabled = selectedDate>=today;
   document.getElementById('monthlyAlert').style.display = isWeek4(d)?'block':'none';
 
-  buildSchedule(schedule, done);
+  const infoEl = document.getElementById('editDayInfo');
+  if(infoEl){ infoEl.style.display=editMode?'':'none'; infoEl.textContent=editMode?'⚠️ Faqat '+DAYS_UZ[dow]+' kuni uchun':''; }
+
+  buildSchedule(schedule, done, dow);
 
   const soloEl=document.querySelector('#tab-daily [data-id="solo_trip"]');
   if(soloEl) soloEl.classList.toggle('done', done.includes('solo_trip'));
@@ -659,10 +671,10 @@ function renderDaily(){
 function renderHistory(){
   const grid=document.getElementById('historyGrid'), today=dateKey(new Date());
   grid.innerHTML='';
-  const schedule=getSchedule();
   for(let i=13;i>=0;i--){
     const d=new Date(); d.setDate(d.getDate()-i);
     const key=dateKey(d), done=loadDone(key);
+    const schedule=getScheduleForDate(key);
     const ids=getAllIds(schedule), count=ids.filter(id=>done.includes(id)).length;
     const pct=ids.length?Math.round(count/ids.length*100):0;
     const card=document.createElement('div');
